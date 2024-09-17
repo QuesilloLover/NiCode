@@ -1,0 +1,5 @@
+# Ignore db file
+backend/NiCode/db.sqlite3
+
+# Ignore venv folder
+venv/
