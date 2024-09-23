@@ -1,6 +1,6 @@
 from django.db import models
 from users.models import CustomUser
-
+from codeSystem.models import Problem
 
 class RoomStatus(models.Model):
     """
@@ -39,3 +39,12 @@ class RoomMembers(models.Model):
     def __str__(self):
         return f"{self.user.username} in {self.room.room_name}"
     
+
+class ProblemSet(models.Model):
+    id = models.AutoField(primary_key=True)
+    room_id = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='problem_sets')
+    problem = models.ForeignKey(Problem, on_delete=models.CASCADE, related_name='problem_sets')
+    added_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"ProblemSet for Room {self.room_id} - Problem {self.problem.name}"
