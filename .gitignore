@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Created by https://www.toptal.com/developers/gitignore/api/node,django,react,windows,linux,macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=node,django,react,windows,linux,macos
 
@@ -26,6 +27,18 @@ media
 # in your Git repository. Update and uncomment the following line accordingly.
 # <django-project-name>/staticfiles/
 
+=======
+### Django ###
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media
+
+>>>>>>> 5216875dbd44dd63cdec97d469a3ba7faed70c87
 ### Django.Python Stack ###
 # Byte-compiled / optimized / DLL files
 *.py[cod]
@@ -105,6 +118,7 @@ target/
 profile_default/
 ipython_config.py
 
+<<<<<<< HEAD
 # pyenv
 #   For a library or package, you might want to ignore these files since the code is
 #   intended to run in multiple environments; otherwise, check them in:
@@ -130,6 +144,11 @@ ipython_config.py
 #   pdm stores project-wide configurations in .pdm.toml, but it is recommended to not include it
 #   in version control.
 #   https://pdm.fming.dev/#use-with-ide
+=======
+# pdm
+#   Similar to Pipfile.lock, it is generally recommended to include pdm.lock in version control.
+#pdm.lock
+>>>>>>> 5216875dbd44dd63cdec97d469a3ba7faed70c87
 .pdm.toml
 
 # PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
@@ -175,6 +194,7 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
+<<<<<<< HEAD
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
 #  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
@@ -379,6 +399,18 @@ node_modules
 psd
 thumb
 sketch
+=======
+
+### Python Patch ###
+# Poetry local configuration file - https://python-poetry.org/docs/configuration/#local-configuration
+poetry.toml
+
+# ruff
+.ruff_cache/
+
+# LSP config files
+pyrightconfig.json
+>>>>>>> 5216875dbd44dd63cdec97d469a3ba7faed70c87
 
 ### Windows ###
 # Windows thumbnail cache files
@@ -405,5 +437,8 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+<<<<<<< HEAD
 
 # End of https://www.toptal.com/developers/gitignore/api/node,django,react,windows,linux,macos
+=======
+>>>>>>> 5216875dbd44dd63cdec97d469a3ba7faed70c87
