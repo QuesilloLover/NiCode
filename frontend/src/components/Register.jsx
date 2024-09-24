@@ -35,7 +35,7 @@ export default function Register() {
         setIsLoading(true);
 
         try {
-            const response = await axios.post('http://127.0.0.1:8000/api/register/', formData);
+            const response = await axios.post('http://127.0.0.1:8000/auth/registration/', formData);
             setSuccessmessage("Registration successful!");  // Set success message
             setError(null);  // Clear any previous errors
         } catch (error) {
@@ -57,8 +57,6 @@ export default function Register() {
 
     return (
         <div>
-            {error && <p style={{ color: 'red' }}>{error}</p>}  
-            {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}  
             <form>
                 <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px] ">
                     {/* Este contenedor es la imagen de la izquierda, el logo */}
@@ -80,35 +78,40 @@ export default function Register() {
                             <div className="grid gap-4">
                                 <div className="grid gap-2">
                                     <div className="flex items-center">
-                                        <Label className="text-white">Usuario</Label>
+                                        <Label className="text-white">Nombre de Usuario</Label>
                                     </div>
                                     <Input
                                         id="user"
                                         type="text"
                                         placeholder="Ingresa tu nombre de usuario"
+                                        name='username' value={formData.username} 
+                                        onChange={handleChange}
                                         required
                                     />
                                 </div>
                                 <div className="grid gap-2">
                                     <div className="flex items-center">
-                                        <Label htmlFor="email" className="text-white">Correo Electronico</Label>
+                                        <Label htmlFor="email" className="text-white">Correo Electrónico</Label>
                                     </div>
                                     <Input
                                         id="email"
                                         type="email"
                                         placeholder="quesillo@nicode.com"
+                                        name='email' 
+                                        value={formData.email} 
+                                        onChange={handleChange}
                                         required
                                     />
                                 </div>
                                 <div className="grid gap-2">
                                     <div className="flex items-center">
-                                        <Label htmlFor="password" className="text-white">Contraseña</Label>
+                                        <Label htmlFor="password1" className="text-white">Contraseña</Label>
                                     </div>
-                                    <Input id="password" type="password" required />
+                                    <Input id="password1" name="password1" type="password" value={formData.password1} onChange={handleChange}  required />
                                 </div>
                                 <div className="grid gap-2">
                                     <div className="flex items-center">
-                                        <Label htmlFor="password" className="text-white">Confirmar Contraseña</Label>
+                                        <Label htmlFor="password2" className="text-white">Confirmar Contraseña</Label>
                                         {/* <a
                                         href="#"
                                         className="ml-auto inline-block text-sm underline text-white"
@@ -116,22 +119,22 @@ export default function Register() {
                                         Forgot your password?
                                         </a> */}
                                     </div>
-                                    <Input id="password" type="password" required />
+                                    <Input id="password2" name="password2" type="password"  value={formData.password2} onChange={handleChange} required />
                                 </div>
-                                <Button type="submit" className="w-full font-bold bg-ButtonColor text-TextButtonColor">
+                                <Button type="submit" className="w-full font-bold bg-ButtonColor text-TextButtonColor" disabled={isLoading} onClick={handleSubmit}>
                                     Registrarse
                                 </Button>
+                                {error && <p style={{ color: 'red' }}>{error}</p>}  
+                                {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}  
                             </div>
                             <div className="mt-4 text-center text-sm text-white">
-                                Ya tienes una cuenta?{" "}
+                                ¿Ya tienes una cuenta?{" "}
                                 <Link to="/login" className="underline text-LoginFooterColor">
-                                Inicia Sesion
+                                Inicia Sesión
                                 </Link>
                             </div>
                         </div>
-                    </div>
-
-                    
+                    </div>   
                 </div>
             </form>
         </div>

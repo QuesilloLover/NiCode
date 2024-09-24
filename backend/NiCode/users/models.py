@@ -6,6 +6,7 @@ class CustomUser(AbstractUser):
     """
     Custom user model with additional fields
     """
+    id = models.AutoField(primary_key=True)
     bio = models.TextField(blank=True)
     elo = models.IntegerField(default=0)
     profile_image = models.URLField(max_length=255, blank=True)
@@ -31,6 +32,7 @@ class Guild(models.Model):
     """
     Collection of guilds made by users
     """
+    id = models.AutoField(primary_key=True)
     guild_name = models.CharField(max_length=100)
     description = models.CharField(max_length=200)
     
@@ -44,6 +46,7 @@ class RoleGuild(models.Model):
     """
     Collection of available roles for users in a guild
     """
+    id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=50)
 
     def __str__(self):
@@ -54,6 +57,7 @@ class Badge(models.Model):
     """
     Collection of badges that can be awarded to users
     """
+    id = models.AutoField(primary_key=True)
     badge_name = models.CharField(max_length=100)
     description = models.CharField(max_length=200)
     badge_image = models.URLField(max_length=255)
@@ -66,6 +70,7 @@ class UserBadge(models.Model):
     """
     Collection of badges awarded to users
     """
+    id = models.AutoField(primary_key=True)
     user_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     badge_id = models.ForeignKey(Badge, on_delete=models.CASCADE)
     awarded_at = models.DateTimeField(auto_now_add=True)
