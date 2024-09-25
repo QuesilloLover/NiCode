@@ -94,6 +94,9 @@ export default function Login() {
                                 <Button type="submit" className="w-full font-bold bg-ButtonColor text-TextButtonColor" disabled={isLoading}>
                                     Iniciar Sesion
                                 </Button>
+                                <Button variant="outline" className="w-full">
+                                    Login with Google
+                                </Button>
                                 {error && <p style={{ color: 'red' }}>{error}</p>}
                                 {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
                             </div>
