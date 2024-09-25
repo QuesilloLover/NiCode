@@ -3,6 +3,7 @@ import python from '../../assets/Language_home_img/python.png';
 import javascript from '../../assets/Language_home_img/javascript.png';
 import c from '../../assets/Language_home_img/c.png';
 import csharp from '../../assets/Language_home_img/csharp.png';
+import { Link } from 'react-router-dom';
 
 const QueEsNicode = () => {
   return (
@@ -31,9 +32,9 @@ const QueEsNicode = () => {
             alt="C++"
             className="w-24 h-24 mb-4"
           />
-          <button className="bg-green-400 text-black font-bold px-4 py-2 rounded-full hover:bg-green-300">
+          <Link to="Sala" className="bg-green-400 text-black font-bold px-4 py-2 rounded-full hover:bg-green-300">
             Ir a la sala
-          </button>
+          </Link>
         </div>
 
         {/* Icono de Python */}
@@ -43,9 +44,9 @@ const QueEsNicode = () => {
             alt="Python"
             className="w-24 h-24 mb-4"
           />
-          <button className="bg-green-400 text-black font-bold px-4 py-2 rounded-full hover:bg-green-300">
+          <Link to="Sala" className="bg-green-400 text-black font-bold px-4 py-2 rounded-full hover:bg-green-300">
             Ir a la sala
-          </button>
+          </Link>
         </div>
 
         {/* Icono de JavaScript */}
@@ -55,9 +56,9 @@ const QueEsNicode = () => {
             alt="JavaScript"
             className="w-24 h-24 mb-4"
           />
-          <button className="bg-green-400 text-black font-bold px-4 py-2 rounded-full hover:bg-green-300">
+          <Link to="Sala" className="bg-green-400 text-black font-bold px-4 py-2 rounded-full hover:bg-green-300">
             Ir a la sala
-          </button>
+          </Link>
         </div>
 
         {/* Icono de C# */}
@@ -67,9 +68,9 @@ const QueEsNicode = () => {
             alt="C#"
             className="w-24 h-24 mb-4"
           />
-          <button className="bg-green-400 text-black font-bold px-4 py-2 rounded-full hover:bg-green-300">
+          <Link to="Sala" className="bg-green-400 text-black font-bold px-4 py-2 rounded-full hover:bg-green-300">
             Ir a la sala
-          </button>
+          </Link>
         </div>
       </div>
     </section>

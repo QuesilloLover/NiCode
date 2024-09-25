@@ -1,6 +1,8 @@
 # Created by https://www.toptal.com/developers/gitignore/api/node,django,react,windows,linux,macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=node,django,react,windows,linux,macos
 
+.env
+
 .Python
 [Bb]in
 [Ii]nclude

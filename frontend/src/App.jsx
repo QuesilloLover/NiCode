@@ -4,6 +4,7 @@ import Home from './components/Home'
 import Layout from './components/Layout'
 import Login from './components/Login'
 import Register from './components/Register'
+import Sala from './components/Sala'
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="register" element={<Register />} />
           <Route path="login" element={<Login />} />
+          <Route path="sala" element={<Sala/>}/>
         </Route>
       </Routes>
     </BrowserRouter>
