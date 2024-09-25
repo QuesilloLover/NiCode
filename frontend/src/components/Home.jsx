@@ -23,7 +23,7 @@ export default function Home() {
               "Authorization":`Bearer ${token}`
             }
           };
-          const response = await axios.get("http://127.0.0.1:8000/api/user/", config)
+          const response = await axios.get("http://127.0.0.1:8000/user/", config)
           setLoggedIn(true)
           setUsername(response.data.username)
         }
