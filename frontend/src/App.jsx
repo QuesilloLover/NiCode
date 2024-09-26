@@ -7,6 +7,7 @@ import Register from './components/Register'
 import Sala from './components/Sala'
 import ProblemCRUD from './components/ProblemCRUD';
 import Coding from './components/CodingEnv';
+import CodeEditor from './components/CodeEditor'
 
 function App() {
   return (
@@ -26,3 +27,13 @@ function App() {
 }
 
 export default App;
+
+// function App() {
+//   return (
+//     <div className="App">
+//       <CodeEditor />
+//     </div>
+//   );
+// }
+
+

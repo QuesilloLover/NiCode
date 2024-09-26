@@ -6,9 +6,11 @@ import NiCode from '../assets/NiCode.svg';
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useNavigate } from 'react-router-dom';
 
 export default function Register() {
-
+    const navigate = useNavigate();
+    
     const [formData, setFormData] = useState({
         username: '',
         email: '',
@@ -38,6 +40,9 @@ export default function Register() {
             const response = await axios.post('http://127.0.0.1:8000/auth/registration/', formData);
             setSuccessmessage("Registration successful!");  // Set success message
             setError(null);  // Clear any previous errors
+
+            // Redirect to login page
+            navigate('/login');
         } catch (error) {
             setSuccessmessage(null);  // Clear success message in case of error
             if(error.response && error.response.data){

@@ -12,11 +12,12 @@ class Problem(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
     function_name = models.CharField(max_length=255)
+    return_type = models.CharField(max_length=255, default='int')
     description = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='problems')
 
     def __str__(self):
-        return self.name
+        return f"#{self.id} {self.name}" 
     
 class Parameter(models.Model):
     id = models.AutoField(primary_key=True)
