@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import NiCode from '../assets/NiCode.png';
+import NiCode from '../assets/NiCode.svg';
 import { Link } from 'react-router-dom';
 
 import { Button } from "@/components/ui/button"

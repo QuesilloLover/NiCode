@@ -23,9 +23,9 @@ const HomeScreen = () => {
       </p>
 
       {/* Texto adicional */}
-      <p className="text-indigo-300 mt-20 text-2xl mt-10 animate-bounce">
-        ¡Practica ejercicios de programación...
-      </p>
+      <h1 class="relative w-[max-content] font-mono before:absolute before:inset-0 before:animate-typewriter before:bg-white">
+        Hello World</h1>
+
     </div>
   );
 };
