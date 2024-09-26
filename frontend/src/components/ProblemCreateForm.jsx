@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import NiCode from '../assets/NiCode.png';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import ReactMarkdown from 'react-markdown';
 
-const ProblemCRUD = () => {
+const ProblemCreateForm = () => {
     const [problems, setProblems] = useState([]);
     const [name, setName] = useState('');
     const [functionName, setFunctionName] = useState('');
@@ -18,12 +18,27 @@ const ProblemCRUD = () => {
     const [paramIsArray, setParamIsArray] = useState(false);
     const [paramPosition, setParamPosition] = useState('');
 
-    const categories = [
-        { id: 1, name: "Algoritmos" },
-        { id: 2, name: "Estructuras de Datos" },
-        { id: 3, name: "Matemáticas" },
-        { id: 4, name: "Cadenas de Texto" }
-    ];
+    const [categories, setCategories] = useState([]);
+    useEffect(() => {
+        const token = localStorage.getItem('accessToken');
+
+        fetch('http://localhost:8000/categories/', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Token ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }).then(response => response.json())    
+          .then(data => {
+            setCategories(data);
+            console.log(data)
+          })
+          .catch(error => {
+            console.error('Error fetching categories:', error);
+          });   
+
+      }, []);
+
 
     const paramTypes = [
         { value: 'string', label: 'String' },
@@ -35,29 +50,51 @@ const ProblemCRUD = () => {
 
     const handleSave = (event) => {
         event.preventDefault();
+        
         const newProblem = {
             name: name,
-            functionName: functionName,
+            function_name: functionName,
             description: description,
-            categoryId: categoryId,
+            category: categoryId,
             parameters: parameters
         };
 
-        if (editIndex !== null) {
-            const updatedProblems = [...problems];
-            updatedProblems[editIndex] = newProblem;
-            setProblems(updatedProblems);
-            setEditIndex(null);
-        } else {
-            setProblems([...problems, newProblem]);
-        }
-
-        setName('');
-        setFunctionName('');
-        setDescription('');
-        setCategoryId('');
-        setParameters([]);
+        console.log(newProblem)
+    
+        const token = localStorage.getItem('accessToken');
+            const url = 'http://localhost:8000/upload-problem/';
+    
+        // Use fetch to send the new problem data
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Token ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newProblem), // Convert the newProblem object to JSON
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Success:', data); // Handle the response data
+            // Optionally update the local state if necessary
+            setProblems([...problems, newProblem]); // Update state with the newly added problem
+            // Reset form fields
+            setName('');
+            setFunctionName('');
+            setDescription('');
+            setCategoryId('');
+            setParameters([]);
+        })
+        .catch(error => {
+            console.error('Error:', error); // Handle any errors
+        });
     };
+    
 
     const handleDelete = (index) => {
         const updatedProblems = problems.filter((_, i) => i !== index);
@@ -163,8 +200,8 @@ const ProblemCRUD = () => {
                             >
                                 <option value="" disabled>Selecciona una categoría</option>
                                 {categories.map(category => (
-                                    <option key={category.id} value={category.id}>
-                                        {category.name}
+                                    <option key={category.category_id} value={category.category_id}>
+                                        {category.category_name}
                                     </option>
                                 ))}
                             </select>
@@ -275,4 +312,4 @@ const ProblemCRUD = () => {
     );
 };
 
-export default ProblemCRUD;
+export default ProblemCreateForm;

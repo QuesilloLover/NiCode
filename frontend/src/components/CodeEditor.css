@@ -1,0 +1,412 @@
+body, html{
+    background-color: #E0E0E0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    /* overflow: hidden; */
+    font-family: 'Roboto', 'Lato', sans-serif;    
+}
+
+.container{
+    height: calc(100% - 50px);
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+}
+
+.content{
+    width: calc(50% - 4px);
+    height: calc(100% - 16px);
+    box-sizing: border-box;
+    background-color: #ffffff;
+
+    border-radius: 8px;
+}
+
+#left{
+    margin: 8px 0 8px 8px;
+
+}
+
+#right{
+    margin: 8px 8px 8px 0;
+}
+
+.resize-bar{
+    background-color: #E0E0E0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.resize-bar svg{
+    fill: #8b8b8b
+}
+
+.resize-bar:hover{
+    background-color: #1C77C3;
+}
+
+.resize-bar:hover svg {
+    fill: #f7f7f7;
+}
+
+.resize-bar:active{
+    background-color: #1C77C3;
+}
+
+.resize-bar:active svg {
+    fill: #f7f7f7;
+}
+
+.horizontal{
+    width: 8px;
+    margin: 8px 0;
+}
+
+.vertical{
+    height: 8px;
+}
+
+.vertical:hover{
+    cursor: row-resize;
+}
+
+.horizontal:hover{
+    cursor: col-resize;
+}
+
+
+.content-header{
+    height: 40px;
+
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+
+    border-bottom: solid #E0E0E0 1px;
+
+    background-color: #f7f7f7;
+
+    display: flex;
+    flex-direction: row;
+}
+
+.problem-section{
+    height: calc(100% - 41px);
+
+    overflow-y: scroll;
+
+    padding: 0 0 0 20px;
+}
+
+.window-options{
+    display: flex;
+    flex-direction: row;
+
+    width: 100%;
+
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.window{
+    display: flex;
+
+    height: 100%;
+    align-items: center;
+}
+
+.window > a {
+    text-decoration: none;
+    color: black;
+}
+
+.active{
+    font-weight: bold;
+    border-bottom: solid #1C77C3 4px;
+}
+
+.problem-title{
+    display: flex;
+    flex-direction: row;
+
+    height: auto;
+
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 5%;
+
+    margin-top: 0.8rem;
+    overflow: hidden;
+}
+
+.title{
+    width: 80%;
+    margin: 0;
+
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.difficulty-tag{
+    display: flex;
+    height: 25px;
+    width: 50px;
+    background-color: red;
+    border-radius: 25px;
+
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+    left: 0;
+}
+
+.difficulty-tag span{
+    margin: 0;
+
+    color: #f7f7f7;
+    text-align: center;
+}
+
+.problem-body p{
+    white-space: pre-line;
+}
+
+.working-space{
+    height: calc(100% - 40px);
+    background: rgba(0,0,0,0.1);
+}
+
+.editor-area{
+    height: calc(50% - 4px);
+}
+
+.console{
+    height: calc(50% - 4px);
+
+    border-radius: 8px;
+}
+
+
+
+.select-dropdown{
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding-left: 14px;
+
+}
+
+select{
+    font-size: 0.8rem;
+    font-weight: normal;
+    max-width: 100%;
+    padding: 4px 12px 4px 5px;
+
+    border-radius: 4px;
+
+}
+
+.icons{
+    display: flex;
+
+    flex-direction: row-reverse;
+    align-items: center;
+
+    margin-left: auto;
+    padding-right: 0.5rem;
+}
+
+.icon{
+    height: 20px;
+    width: 20px;
+    margin: 0 0.5rem;
+
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    padding: 0;
+    transition: opacity 0.3s ease;
+}
+
+
+.console-area{
+    overflow-y: scroll;
+    height: calc(100% - 80px);
+    background-color: #ffffff;
+}
+
+.button-row{
+    display: flex;
+    flex-direction: row;
+
+    height: 40px;
+
+    background-color: #ffffff;
+    border-top: solid #E0E0E0 1px;
+
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.button-container{
+    display: flex;
+    flex-direction: row-reverse;
+    height: 100%;
+    width: 250px;
+
+    align-items: center;
+    justify-content:end;
+    margin-right: 0.8rem;;
+}
+
+.button-container > * {
+    margin-right: 10px  ;
+}
+
+.action-button{
+    padding: 1px 4px;
+    width: 40%;
+    max-width: 110px;
+    height: 70%;
+
+    border: none;
+    border-radius: 6px;
+
+    color: white;
+    font-weight: 600;
+}
+
+#run{
+    background-color: #1ed760;
+}
+
+#run:hover{
+    background-color: #14903f;
+}
+
+#notes{
+    display: flex;
+    
+    height: 80%;
+    width: calc(100% - 20px);
+
+    margin-top: 16px;
+    resize: none;
+}
+
+.field-container{
+    padding: 10px 20px;
+}
+
+.field-title{
+    margin-bottom: 5px;
+    font-size: 1em;
+}
+
+.field-value{
+    width: 100%;
+    background-color: #f7f7f7;
+    padding: 10px;
+    border-radius: 10px;
+    white-space: pre-line;
+}
+
+.test-row{
+    height: 40px;
+    padding: 5px 20px;
+
+    display: flex;
+    flex-direction: row;
+
+    align-items: center;
+
+    overflow-x: scroll;
+}
+
+.test-row::-webkit-scrollbar {
+    display: none;
+  }
+  
+/* Hide scrollbar for IE, Edge and Firefox */
+.test-row {
+-ms-overflow-style: none;  /* IE and Edge */
+scrollbar-width: none;  /* Firefox */
+}
+
+.test-case{
+    display: flex;
+    flex-direction: row;
+    width: 80px;
+    height: 30px;
+
+    border-radius: 8px;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0px 0.3rem;
+}
+
+.test-case:hover{
+    background-color: #f7f7f7;
+    cursor: pointer;
+}
+
+.dot{
+    height: 0.3rem;
+    width: 0.3rem;
+    margin-right: 0.5rem;
+
+    border-radius: 9999px;
+
+}
+
+.correct{
+    background-color: green;
+}
+
+.wrong{
+    background-color: red;
+    color: white;
+}
+
+.wrong-test{
+    color:red;
+}
+
+#placeholder{
+    text-align: center;
+    vertical-align: middle;
+}
+
+.solution-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.loader {
+border: 6px solid #f7f7f7; /* Light grey */
+border-top: 6px solid #1C77C3; /* Blue */
+border-radius: 50%;
+height: 20px;
+width: 20px;
+animation: spin 2s linear infinite;
+}
+
+.cm-editor{
+    text-align: left !important;
+  }
+
+@keyframes spin {
+0% { transform: rotate(0deg); }
+100% { transform: rotate(360deg); }
+}

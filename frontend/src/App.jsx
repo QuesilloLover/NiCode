@@ -5,9 +5,11 @@ import Layout from './components/Layout'
 import Login from './components/Login'
 import Register from './components/Register'
 import Sala from './components/Sala'
-import ProblemCRUD from './components/ProblemCRUD';
+import ProblemCRUD from './components/ProblemCreateForm';
 import Coding from './components/CodingEnv';
 import CodeEditor from './components/CodeEditor'
+import ProblemCreateForm from './components/ProblemCreateForm';
+import AddTestCaseForm from './components/TestcasesCreateForm';
 
 function App() {
   return (
@@ -18,7 +20,9 @@ function App() {
           <Route path="register" element={<Register />} />
           <Route path="login" element={<Login />} />
           <Route path="sala" element={<Sala/>}/>
-          <Route path="crud" element={<ProblemCRUD />} />
+          <Route path="crud" element={<ProblemCreateForm />} />
+          <Route path='testcases/:problemId' element={<AddTestCaseForm />} />
+          <Route path='codeEditor' element={<CodeEditor />} />
           <Route path="coding" element={<Coding/>}   />
         </Route>
       </Routes>
