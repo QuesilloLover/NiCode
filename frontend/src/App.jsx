@@ -6,6 +6,7 @@ import Login from './components/Login'
 import Register from './components/Register'
 import Sala from './components/Sala'
 import ProblemCRUD from './components/ProblemCRUD';
+import Coding from './components/CodingEnv';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="sala" element={<Sala/>}/>
           <Route path="crud" element={<ProblemCRUD />} />
+          <Route path="coding" element={<Coding/>}   />
         </Route>
       </Routes>
     </BrowserRouter>

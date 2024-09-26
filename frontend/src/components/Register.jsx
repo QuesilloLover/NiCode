@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Link, Outlet } from 'react-router-dom';
-import NiCode from '../assets/NiCode.png';
+import NiCode from '../assets/NiCode.svg';
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"

@@ -7,6 +7,19 @@ export default {
   ],
   theme: {
   	extend: {
+
+		animation: {
+			typewriter: "typewriter 2s steps(11) forwards"
+		},
+
+		keyframes: {
+			typewriter: {
+			  to: {
+				left: "100%"
+			  }
+			}
+		},
+
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
