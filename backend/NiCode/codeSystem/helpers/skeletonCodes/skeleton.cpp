@@ -3,28 +3,36 @@
 #include <string>   
 #include <cmath> 
 #include <algorithm>   
+using namespace std;
 
 // Generic function to print any type
 template <typename T>
-void printResult(T result) 
+std::string printResult(T result) 
 {
-    std::cout << result << std::endl;
+    std::stringstream ss;
+    ss << result;
+    return ss.str();
 }
 
 // Specialization for std::vector
 template <typename T>
-void printResult(std::vector<T> result)
+std::string printResult(std::vector<T> result)
 {
+    std::stringstream ss;
     for (const auto& element : result) 
     {
-        std::cout << element << " ";
+        ss << element << " ";
     }
-    std::cout << std::endl;
+    return ss.str();
 }
+    
 
 //USER_FUNCTION_GOES_HERE
 
 int main() 
 {
-    //Testcases
+    string testResults = "";
+    //TESTCASES_GOES_HERE
+
+
 }

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Problem, Category, Language, Parameter, JudgeCode, InitialCode, TestCase
-from .helpers.generateInitialCode import generateInitialCCode, generateInitialCppCode, generateInitialJavaCode, generateInitialPythonCode
+from .helpers.generateInitialCode import generateInitialCode
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -42,10 +42,10 @@ class ProblemSerializer(serializers.ModelSerializer):
 
         # Generate initial codes for each language
         generated_codes = {
-            'C++': generateInitialCppCode(problem.function_name, problem.return_type, parameter_dicts),
-            'C': generateInitialCCode(problem.function_name, problem.return_type, parameter_dicts),
-            'Java': generateInitialJavaCode(problem.function_name, problem.return_type, parameter_dicts),
-            'Python': generateInitialPythonCode(problem.function_name, problem.return_type, parameter_dicts),
+            'C++': generateInitialCode('cpp',problem.function_name, problem.return_type, parameter_dicts),
+            'C': generateInitialCode('c',problem.function_name, problem.return_type, parameter_dicts),
+            'Java': generateInitialCode('java',problem.function_name, problem.return_type, parameter_dicts),
+            'Python': generateInitialCode('python',problem.function_name, problem.return_type, parameter_dicts),
         }
 
         # Loop through each language and create an InitialCode object
