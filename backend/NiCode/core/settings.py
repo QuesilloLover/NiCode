@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'users',
     'rooms',
     'codeSystem',
+    'forum',
     'corsheaders',
     'django.contrib.sites',
     'rest_framework',
