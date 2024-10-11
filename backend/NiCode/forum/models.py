@@ -40,6 +40,7 @@ class Comment(models.Model):
     message = models.TextField()  
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)  
     post_date = models.DateTimeField(auto_now_add=True) 
+    topic_related = models.ForeignKey(Topic, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"Comment made by {self.author} on {self.post_date}"  
