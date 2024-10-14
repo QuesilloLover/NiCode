@@ -10,6 +10,7 @@ import Coding from './components/CodingEnv';
 import CodeEditor from './components/CodeEditor'
 import ProblemCreateForm from './components/ProblemCreateForm';
 import AddTestCaseForm from './components/TestcasesCreateForm';
+import Forum from './components/Forum';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path='testcases/:problemId' element={<AddTestCaseForm />} />
           <Route path='codeEditor' element={<CodeEditor />} />
           <Route path="coding" element={<Coding/>}   />
+          <Route path="forum" element={<Forum/>}   />
         </Route>
       </Routes>
     </BrowserRouter>
