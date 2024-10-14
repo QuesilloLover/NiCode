@@ -2,7 +2,8 @@
 #include <vector>
 #include <string>   
 #include <cmath> 
-#include <algorithm>   
+#include <algorithm>
+#include <sstream>   
 using namespace std;
 
 // Generic function to print any type
@@ -26,13 +27,16 @@ std::string printResult(std::vector<T> result)
     return ss.str();
 }
     
-
 //USER_FUNCTION_GOES_HERE
 
 int main() 
 {
     string testResults = "";
     //TESTCASES_GOES_HERE
+    string separator = "SEPARATOR_GOES_HERE";
+    cout << separator << endl;
+    cout << testResults;
+    return 0;
 
 
 }
