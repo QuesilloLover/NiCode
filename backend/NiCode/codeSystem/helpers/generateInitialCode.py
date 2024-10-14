@@ -9,7 +9,7 @@ def generateInitialCode(language, function_name, function_return_type, parameter
     parameters (list of dict): A list of dictionaries where each dict contains:
                                 - 'name' (str): Parameter name.
                                 - 'type' (str): Parameter type.
-                                - 'isArray' or 'isList' (bool, optional): Whether the parameter is an array/list.
+                                - 'isArray'(bool, optional): Whether the parameter is an array/list.
     
     Returns:
     str: The generated code in the specified language.
@@ -76,12 +76,14 @@ def generateInitialCode(language, function_name, function_return_type, parameter
     else:
         return "Unsupported language code"
 
-# Example usage:
-parameters = [
-    {'name': 'arr', 'type': 'int', 'isArray': True},
-    {'name': 'n', 'type': 'int'}
-]
-print(generateInitialCode('c', 'myFunction', 'void', parameters))
-print(generateInitialCode('cpp', 'myFunction', 'void', parameters))
-print(generateInitialCode('java', 'myFunction', 'void', parameters))
-print(generateInitialCode('python', 'my_function', 'None', parameters))
+if __name__ == '__main__':
+
+    # Example usage:
+    parameters = [
+        {'name': 'arr', 'type': 'int', 'isArray': True},
+        {'name': 'n', 'type': 'int'}
+    ]
+    print(generateInitialCode('c', 'myFunction', 'void', parameters))
+    print(generateInitialCode('cpp', 'myFunction', 'void', parameters))
+    print(generateInitialCode('java', 'myFunction', 'void', parameters))
+    print(generateInitialCode('python', 'my_function', 'None', parameters))

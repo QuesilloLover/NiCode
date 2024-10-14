@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from .models import Problem, Category, Language, Parameter, JudgeCode, InitialCode, TestCase
 from .helpers.generateInitialCode import generateInitialCode
+from .helpers.generateTestcases import generateTestcases
+from .helpers.applySkeleton import apply_skeleton
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -73,7 +75,30 @@ class TestCasesUploadSerializer(serializers.Serializer):
             test_case = TestCase.objects.create(problem=problem, **case_data)
             test_cases.append(test_case)
         
+        self.generate_test_code(problem)
         return test_cases
+    
+    def generate_test_code(self, problem):
+
+        params_strings = [
+            f"{test_case.input}|{test_case.output}"
+            for test_case in TestCase.objects.filter(problem=problem)
+        ]
+
+        param_types = Parameter.objects.filter(problem=problem).values('type', 'is_array')
+
+        generated_codes = {
+            'C++': generateTestcases(params_strings, param_types, language="cpp", function_name=problem.function_name),
+            'Java': generateTestcases(params_strings, param_types, language="java", function_name=problem.function_name),
+            'Python': generateTestcases(params_strings, param_types, language="python", function_name=problem.function_name),
+        }
+
+        # Loop through each language, apply skeleton, and create an InitialCode object
+        for language_name, code in generated_codes.items():
+            language = Language.objects.get(name=language_name)  # Get language instance
+            wrapped_code = apply_skeleton(language_name, code)
+            judge_code = JudgeCode(problem=problem, language=language, code=wrapped_code)
+            judge_code.save()
 
 class InitialCodeSerializer(serializers.ModelSerializer):
     class Meta:

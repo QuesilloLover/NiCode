@@ -23,6 +23,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -187,3 +188,5 @@ SOCIAL_AUTH_GOOGLE_SECRET = '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'
 
 # Redirect after successful login
 LOGIN_REDIRECT_URL = '/'
+
+ASGI_APPLICATION = "core.asgi.application"
