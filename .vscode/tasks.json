@@ -1,0 +1,62 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Run React App",
+        "type": "shell",
+        "command": "npm run dev",
+        "options": {
+          "cwd": "${workspaceFolder}/frontend"
+        },
+        "problemMatcher": [],
+        "group": "build",
+        "presentation": {
+          "reveal": "always",
+          "panel": "dedicated"
+        }
+      },
+      {
+        "label": "Run Django App",
+        "type": "shell",
+        "command": ".venv\\Scripts\\activate.ps1; python manage.py runserver",
+        "options": {
+          "cwd": "${workspaceFolder}/backend/NiCode"
+        },
+        "problemMatcher": [],
+        "group": "build",
+        "presentation": {
+          "reveal": "always",
+          "panel": "dedicated"
+        }
+      },
+      {
+        "label": "Run Docker",
+        "type": "shell",
+        "command": "docker-compose up",
+        "options": {
+          "cwd": "${workspaceFolder}/backend/code-execution"
+        },
+        "problemMatcher": [],
+        "group": "build",
+        "presentation": {
+          "reveal": "always",
+          "panel": "dedicated"
+        }
+      },
+      {
+        "label": "Init Project",
+        "dependsOn": [
+          "Run React App",
+          "Run Django App",
+          "Run Docker"
+        ],
+        "problemMatcher": [],
+        "group": "build",
+        "presentation": {
+          "reveal": "always",
+          "panel": "shared"
+        }
+      }
+    ]
+  }
+  
