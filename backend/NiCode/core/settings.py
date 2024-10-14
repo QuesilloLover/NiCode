@@ -119,6 +119,10 @@ DATABASES = {
   }
 }
 
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -175,6 +179,8 @@ SOCIALACCOUNT_PROVIDERS = {
         'OAUTH_PKCE_ENABLED': True,
     }
 }
+
+SOCIALACCOUNT_AUTO_SIGNUP = True
 
 SOCIAL_AUTH_GOOGLE_CLIENT_ID = '898334056104-09rqrbock398s0k0ok14frr8jd59fo7v.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_SECRET = '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'
