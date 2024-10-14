@@ -29,6 +29,11 @@ export default function Register() {
         });
     }
 
+    const handleGoogleRegister = (e) => {
+        e.preventDefault(); 
+        window.location.href = 'http://127.0.0.1:8000/accounts/google/login/?process=login';
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         
@@ -128,6 +133,9 @@ export default function Register() {
                                 </div>
                                 <Button type="submit" className="w-full font-bold bg-ButtonColor text-TextButtonColor" disabled={isLoading} onClick={handleSubmit}>
                                     Registrarse
+                                </Button>
+                                <Button variant="outline" className="w-full" onClick={handleGoogleRegister}>
+                                    Regístrate con Google
                                 </Button>
                                 {error && <p style={{ color: 'red' }}>{error}</p>}  
                                 {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}  

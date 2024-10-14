@@ -25,6 +25,12 @@ export default function Login() {
         });
     }
 
+    const handleGoogleLogin = (e) => {
+        e.preventDefault(); 
+        window.location.href = 'http://127.0.0.1:8000/accounts/google/login/?process=login';
+    };
+    
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -94,11 +100,14 @@ export default function Login() {
                                 <Button type="submit" className="w-full font-bold bg-ButtonColor text-TextButtonColor" disabled={isLoading}>
                                     Iniciar Sesion
                                 </Button>
-                                <Button variant="outline" className="w-full">
+                                <Button variant="outline" className="w-full" onClick={handleGoogleLogin}>
                                     Login with Google
                                 </Button>
                                 {error && <p style={{ color: 'red' }}>{error}</p>}
                                 {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
+                            </div>
+                            <div className="grid gap-4">
+                                
                             </div>
                             <div className="mt-4 text-center text-sm text-white">
                                 ¿No tienes una cuenta?{" "}
