@@ -2,8 +2,9 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Problem, Category, Language, InitialCode
+from .models import Problem, Category, Language, InitialCode, JudgeCode
 from .serializers import ProblemSerializer, CategorySerializer, TestCasesUploadSerializer, InitialCodeSerializer
+from .helpers.applySkeleton import apply_user_code
 import requests
 import time
 class ProblemUploadView(APIView):
@@ -106,6 +107,67 @@ class ExecuteCodeView(APIView):
             stderr = data.get('stderr', '')
             status_code = data.get('status', '').strip() 
 
+            
+            # Return the output, stderr, and status back to the client
+            return Response({
+                'output': output,
+                'stderr': stderr,
+                'status': status_code
+            }, status=status.HTTP_200_OK)
+            
+        except requests.exceptions.HTTPError as http_err:
+            return Response({'detail': str(http_err)}, status=status.HTTP_400_BAD_REQUEST)
+        except requests.exceptions.RequestException as err:
+            return Response({'detail': str(err)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class ExecuteProblemCodeView(APIView):
+    def post(self, request):
+        user_code = request.data.get('code', None)
+        language = request.data.get('language', None)
+        problem_id = request.data.get('problem', None)
+        print(code, language)
+
+        extensions = {
+            "CPP": "cpp",
+            "C": "c",
+            "JAVA": "java",
+            "PYTHON": "python3",
+        }
+
+        judgeCode = JudgeCode.objects.get(id=problem_id)
+
+        code = apply_user_code(judgeCode.language.language_code, user_code, language)
+
+        payload = {
+            "src": code,
+            "stdin":"",
+            "lang": extensions[language],
+            "timeout":5
+        }	
+        try:
+            response = requests.post('http://localhost:7000/submit', json=payload)
+            response.raise_for_status()  # Raise an error for bad responses (4xx and 5xx)
+            
+            data = response.json() 
+            result_url = data.get('data', {})
+
+            if not result_url:
+                return Response({'detail': 'Result URL not found in response.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            
+            time.sleep(1.5)
+
+            result_response = requests.get(result_url)
+            result_response.raise_for_status()  # Raise error if the result request fails
+
+            # Extract the execution result
+            result_data = result_response.json()
+
+            # Extract the fields from the result
+            data = result_data.get('data', {})
+            
+            output = data.get('output', '')
+            stderr = data.get('stderr', '')
+            status_code = data.get('status', '').strip() 
             
             # Return the output, stderr, and status back to the client
             return Response({
