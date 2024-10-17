@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Topic, TopicTags, Tags, Comment, Like
+from users.models import CustomUser  
 
 class TagsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -7,16 +8,22 @@ class TagsSerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 class CommentSerializer(serializers.ModelSerializer):
-    total_likes = serializers.ReadOnlyField()
+    author_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Comment
-        fields = ['id', 'message', 'author', 'post_date', 'total_likes']
+        fields = ['id', 'message','post_date','topic_related', 'author', 'author_name']
+
+    def get_author_name(self, obj):
+        try:
+            return obj.author.username 
+        except CustomUser.DoesNotExist:
+            return "Unknown"
 
 class TopicSerializer(serializers.ModelSerializer):
-    author = serializers.ReadOnlyField(source='author.username')  # Solo lectura, se autocompleta
-    tags = TagsSerializer(many=True, required=False)  # Asume que es una lista de etiquetas
-    comments = CommentSerializer(many=True, read_only=True)  # Comentarios relacionados
+    author = serializers.ReadOnlyField(source='author.username') 
+    tags = TagsSerializer(many=True, required=False) 
+    comments = CommentSerializer(many=True, read_only=True)
     total_likes = serializers.ReadOnlyField()
 
     class Meta:
@@ -25,11 +32,31 @@ class TopicSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         tags_data = validated_data.pop('tags', [])
-        topic = Topic.objects.create(**validated_data)  # Crear el tópico
+        topic = Topic.objects.create(**validated_data)  
 
-        # Relacionar etiquetas a través de TopicTags
+        print(f'Validated Data: {validated_data}')
+        print(f'Tags Data: {tags_data}')
+
         for tag_data in tags_data:
-            tag, created = Tags.objects.get_or_create(name=tag_data['name'])  # Obtén o crea la etiqueta
-            TopicTags.objects.create(topic=topic, tag=tag)  # Crea la relación con TopicTags
+            tag, created = Tags.objects.get_or_create(name=tag_data['name'])  
+            TopicTags.objects.create(topic=topic, tag=tag)  
 
         return topic
+    
+class LikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Like
+        fields = ['id', 'user', 'topic', 'comment', 'liked_on']
+        read_only_fields = ['liked_on']
+
+    def validate(self, data):
+        """
+        Ensure that either a topic or a comment is liked, not both.
+        """
+        
+        if not data.get('topic') and not data.get('comment'):
+            raise serializers.ValidationError("You must like either a topic or a comment.")
+        if data.get('topic') and data.get('comment'):
+            raise serializers.ValidationError("You can only like a topic or a comment, not both.")
+        
+        return data
