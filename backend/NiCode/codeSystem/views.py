@@ -2,11 +2,14 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated # work this
 from .models import Problem, Category, Language, InitialCode, JudgeCode
 from .serializers import ProblemSerializer, CategorySerializer, TestCasesUploadSerializer, InitialCodeSerializer
 from .helpers.applySkeleton import apply_user_code
 import requests
 import time
+
+
 class ProblemUploadView(APIView):
     def post(self, request):
         serializer = ProblemSerializer(data=request.data)

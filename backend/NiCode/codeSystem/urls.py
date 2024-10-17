@@ -8,5 +8,5 @@ urlpatterns = [
     path('upload-testcases/<int:id>/', TestCasesUploadView.as_view(), name='upload-testcases'),
     path('get-initial-code/<int:problem_id>/<str:language_code>/', GetInitialCodeView.as_view(), name='get-initial-code'),
     path('execute-code/', ExecuteCodeView.as_view(), name='execute-code'),
-    path('execute-problem-code/<str:problem_id>/<str:language_code>/', ExecuteProblemCodeView.as_view(), name='execute-problem-code', )
+    path('execute-problem-code/<str:problem_id>/<str:language_code>/', ExecuteProblemCodeView.as_view(), name='execute-problem-code'),
 ]
