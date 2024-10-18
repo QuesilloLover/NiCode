@@ -1,5 +1,6 @@
 import React from 'react';
 import NiCode from '../../assets/NiCode.png';
+import text_animated from './text_animated';
 
 const HomeScreen = () => {
   return (
@@ -23,8 +24,7 @@ const HomeScreen = () => {
       </p>
 
       {/* Texto adicional */}
-      <h1 class="relative w-[max-content] font-mono before:absolute before:inset-0 before:animate-typewriter before:bg-white">
-        Hello World</h1>
+      <text_animated text="Hola como vas" />
 
     </div>
   );

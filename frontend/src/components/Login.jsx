@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import NiCode from '../assets/NiCode.svg';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
 export default function Login() {
+
+    const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         username: "",
@@ -43,6 +46,7 @@ export default function Login() {
             setSuccessMessage("Inicio de sesión exitoso!");
             localStorage.setItem("accessToken", response.data.key);
             setError(null);
+            navigate('/');
         } catch (error) {
             setSuccessMessage(null);
             if (error.response && error.response.data) {

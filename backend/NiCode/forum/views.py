@@ -2,16 +2,23 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
-from .models import Topic, Like, Comment
+from .models import Topic, Like, Comment, Tags
 from django.db.models import Count
-from .serializers import TopicSerializer, LikeSerializer, CommentSerializer
+from .serializers import TopicSerializer, LikeSerializer, CommentSerializer, TagsSerializer
 from rest_framework.authtoken.models import Token
+
+class TagsListView(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request):
+        tags = Tags.objects.all()  
+        serializer = TagsSerializer(tags, many=True)  
+        return Response(serializer.data) 
 
 class TopicList(APIView):
     """
     List all topics, or create a new topic.
     """
-    permission_classes = [AllowAny]  # Auth managed in the serializer
+    permission_classes = [AllowAny]
 
     def get(self, request, format=None):
         topics = Topic.objects.all()
