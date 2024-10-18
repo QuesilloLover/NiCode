@@ -19,7 +19,7 @@ class ProblemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Problem
-        fields = ['name', 'function_name', 'description', 'category', 'parameters']
+        fields = ['id','name', 'function_name', 'description', 'category', 'parameters']
 
     def create(self, validated_data):
         parameters_data = validated_data.pop('parameters')
