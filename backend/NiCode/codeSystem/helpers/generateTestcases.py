@@ -48,7 +48,7 @@ def generateTestcases(param_strings, param_types, language="python", function_na
                 # Build the test case string
                 test_case = 'testResults += '  # Start of the C++ test case string
                 test_case += f'"{param_string}"'
-                test_case += ' + std::string("|")+ printResult(' + function_name + '(' + ', '.join([param_solution for _, param_solution in cpp_params]) + '));'
+                test_case += ' + std::string("|")+ printResult(' + function_name + '(' + ', '.join([param_solution for _, param_solution in cpp_params]) + ')) + ";";'
 
                 return test_case
 
@@ -99,7 +99,7 @@ def generateTestcases(param_strings, param_types, language="python", function_na
                 # Build the test case string
                 test_case = 'testResults += '  # Start of the Java test case string
                 test_case += f'"{param_string}"'  # String part
-                test_case += ' + "|" + printResult(' + function_name + '(' + ', '.join([param_solution for _, param_solution in java_params]) + '));'
+                test_case += ' + "|" + printResult(' + function_name + '(' + ', '.join([param_solution for _, param_solution in java_params]) + ')) + ";";'
 
                 return test_case
 
@@ -145,7 +145,7 @@ def generateTestcases(param_strings, param_types, language="python", function_na
                 # Build the test case string similar to the C++/Java format
                 test_case = 'testResults += '  # Start of the Python test case string
                 test_case += f'"{param_string}"'  # Concatenate the parameter string
-                test_case += ' + "|" + print(' + function_name + '(' + ', '.join(python_params) + '))'
+                test_case += ' + "|" + str(' + function_name + '(' + ', '.join(python_params) + ')) + ";"'
 
                 return test_case
 
