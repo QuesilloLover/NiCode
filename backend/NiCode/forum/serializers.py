@@ -22,13 +22,17 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class TopicSerializer(serializers.ModelSerializer):
     author = serializers.ReadOnlyField(source='author.username') 
-    tags = TagsSerializer(many=True, required=False) 
+    tags = serializers.SerializerMethodField()  # Aquí agrego la parte de los tags
     comments = CommentSerializer(many=True, read_only=True)
     total_likes = serializers.ReadOnlyField()
 
     class Meta:
         model = Topic
         fields = ['id', 'title', 'description', 'author', 'post_date', 'tags', 'comments', 'total_likes']
+
+    def get_tags(self, obj):
+        topic_tags = TopicTags.objects.filter(topic=obj)
+        return TagsSerializer([tag.tag for tag in topic_tags], many=True).data
 
     def create(self, validated_data):
         tags_data = validated_data.pop('tags', [])
@@ -53,7 +57,6 @@ class LikeSerializer(serializers.ModelSerializer):
         """
         Ensure that either a topic or a comment is liked, not both.
         """
-        
         if not data.get('topic') and not data.get('comment'):
             raise serializers.ValidationError("You must like either a topic or a comment.")
         if data.get('topic') and data.get('comment'):

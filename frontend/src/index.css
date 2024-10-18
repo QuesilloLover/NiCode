@@ -82,3 +82,13 @@
 .animate-float {
   animation: float 5s infinite ease-in-out;
 }
+
+@keyframes blink {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.animate-blink {
+  animation: blink 1s infinite;
+}

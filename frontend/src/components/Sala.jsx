@@ -1,4 +1,8 @@
-'use client'
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import NiCode from "../assets/NiCode.png";
+import JoinByCodeModal from "@/JoinByCodeModal";
+import Header from './components_layouts/header'
 
 import { useState } from "react"
 import { Link } from "react-router-dom"
@@ -65,29 +69,9 @@ export default function Component() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100">
-      <header className="bg-gray-800 border-b border-gray-700">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <Link to="/" className="flex items-center space-x-2">
-            <img src="/placeholder.svg?height=36&width=36" alt="NiCode Logo" className="h-9 w-9" />
-            <span className="text-xl font-semibold">NiCode</span>
-          </Link>
-          <nav>
-            <ul className="flex space-x-4">
-              <li>
-                <Link to="/salas" className="hover:text-blue-400 transition-colors">
-                  Salas
-                </Link>
-              </li>
-              <li>
-                <Link to="/foros" className="hover:text-blue-400 transition-colors">
-                  Foros
-                </Link>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </header>
+    <>
+      {/* Header */}
+      <Header/>
 
       <main className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-6">

@@ -10,6 +10,7 @@ import Coding from './components/CodingEnv';
 import CodeEditor from './components/CodeEditor'
 import ProblemCreateForm from './components/ProblemCreateForm';
 import AddTestCaseForm from './components/TestcasesCreateForm';
+import Profile from './components/profile/Profile_view';
 import Forum from './components/Forum';
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
           <Route path='codeEditor' element={<CodeEditor />} />
           <Route path="coding" element={<Coding/>}   />
           <Route path="forum" element={<Forum/>}   />
+          <Route path='profile' element={<Profile/>}  />
         </Route>
       </Routes>
     </BrowserRouter>
