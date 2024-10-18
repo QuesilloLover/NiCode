@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import CodeEditor from './CodeEditor';
 
 function TwoSumScreen() {
   const [nums, setNums] = useState([2, 7, 11, 15]);
@@ -32,7 +33,7 @@ function TwoSumScreen() {
       <div className="w-full md:w-1/2 lg:w-2/3 p-4 flex flex-col space-y-4">
         {/* Fila 1 - Editor de código */}
         <div className="flex-grow w-full p-6 bg-gray-900 rounded-lg shadow-lg flex flex-col justify-between">
-          <h2 className="text-xl font-bold mb-2">Editor de Código</h2>
+          {/* <h2 className="text-xl font-bold mb-2">Editor de Código</h2>
           <div className="bg-gray-800 p-4 rounded-lg font-mono text-sm text-green-400 flex-grow">
             <pre>
               <code>
@@ -43,7 +44,8 @@ function TwoSumScreen() {
                 {`}`}
               </code>
             </pre>
-          </div>
+          </div> */}
+          <CodeEditor/>
         </div>
 
         {/* Fila 2 - Resultados y Casos de Prueba */}
