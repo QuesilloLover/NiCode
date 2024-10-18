@@ -76,7 +76,7 @@ export default function Component() {
                     <div className="bg-[#2d3748] p-2 rounded-full text-white">{badge.icon}</div>
                     <div>
                       <p className="font-semibold">{badge.name}</p>
-                      <p className="text-sm text-gray-600">Turquear a caballo bayo de manera exitosa</p>
+                      <p className="text-sm text-gray-600">Nose</p>
                     </div>
                   </li>
                 ))}

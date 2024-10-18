@@ -89,10 +89,10 @@ export default function Header() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="bg-gray-800 text-white">
                     <DropdownMenuItem>
-                      <Link to="/profile" className="w-full">Perfil</Link>
+                      <Link to="/profile" className="w-full text-gray-950">Perfil</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                      <button onClick={handleLogout} className="w-full text-left">Cerrar Sesión</button>
+                      <button onClick={handleLogout} className="w-full text-left text-gray-950">Cerrar Sesión</button>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
