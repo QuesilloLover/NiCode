@@ -1,6 +1,6 @@
 import React from 'react';
 import NiCode from '../../assets/NiCode.png';
-import text_animated from './text_animated';
+import text_animated from './text_animated.jsx';
 
 const HomeScreen = () => {
   return (
@@ -24,7 +24,7 @@ const HomeScreen = () => {
       </p>
 
       {/* Texto adicional */}
-      <text_animated text="Hola como vas" />
+      <text_animated text="Este es un texto animado!" speed={150} />
 
     </div>
   );

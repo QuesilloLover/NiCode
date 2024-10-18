@@ -46,9 +46,21 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google', 
     'dj_rest_auth',
     'dj_rest_auth.registration', 
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 SITE_ID = 1
+
+# Cloudinary configuration
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'ds0zwwi6q',
+    'API_KEY': '214675531623832',
+    'API_SECRET': 'vRIuLQeAoqQzCokIboI2kkYWyMU',
+}
+
+# Cloudinary storage
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
