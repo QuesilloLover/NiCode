@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 import { HelpCircle, Clock, Tag, PlusCircle, ThumbsUp, MessageCircle, Search, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from './components_layouts/header'
@@ -25,28 +24,50 @@ export default function Forum() {
   const [totalLikesByComment, setTotalLikesByComment] = useState({});  
   const [comments, setComments] = useState({});
   const [totalCommentsByTopic, setTotalCommentsByTopic] = useState({});
-
+  const [showTags, setShowTags] = useState(false);
+  const [tags, setTags] = useState([]);
+  const [selectedTag, setSelectedTag] = useState(null); 
+  const [showUnanswered, setShowUnanswered] = useState(false); 
 
   const toggleSidebar = () => setIsSidebarExpanded(!isSidebarExpanded);
 
   // Fetch the access token
   const accessToken = localStorage.getItem("accessToken");
 
+  // Sidebar icons
   const sidebarIcons = [
-    { icon: HelpCircle, label: "Todas las preguntas", onClick: () => setSortBy("recent") },
-    { icon: Clock, label: "Sin respuesta" },
-    { icon: Tag, label: "Etiquetas"},
+    { 
+      icon: HelpCircle, 
+      label: "Todas las preguntas", 
+      onClick: () => {
+        setShowUnanswered(false); 
+        setShowTags(false); 
+      }  
+    },
+    { icon: Clock, 
+      label: "Sin respuesta", 
+      onClick: () => {
+        setShowUnanswered(true); 
+        setShowTags(false);
+      }
+    },
+    { 
+      icon: Tag, 
+      label: "Etiquetas", 
+      onClick: () => setShowTags(true) 
+    },
     { 
       icon: PlusCircle, 
       label: "Añadir pregunta", 
-      onClick: () => setIsModalOpen(true) // Open the modal when the button is clicked
+      onClick: () => setIsModalOpen(true) 
     },
   ];
 
+  // Fetch the questions and likes when the component mounts
   useEffect(() => {
     const fetchQuestionsAndLikes = async () => {
       try {
-          // Obtener preguntas
+          // Get all the available topics
           const response = await axios.get('http://localhost:8000/forum/topics/', {
               headers: {
                   Authorization: `Bearer ${accessToken}`,
@@ -54,7 +75,7 @@ export default function Forum() {
           });
           setQuestions(response.data);
   
-          // Obtener total de comentarios por tópico
+          //Geat each comment for each topic
           const commentsPromises = response.data.map(async (question) => {
               const commentsResponse = await axios.get(`http://localhost:8000/forum/topics/${question.id}/comments/`, {
                   headers: {
@@ -75,7 +96,7 @@ export default function Forum() {
   
           setTotalCommentsByTopic(totalCommentsByTopicData);
   
-          // Obtener likes
+          // Get the likes for each topic
           const likesResponse = await axios.get('http://localhost:8000/forum/likes/', {
               headers: {
                   Authorization: `Bearer ${accessToken}`,
@@ -105,7 +126,7 @@ export default function Forum() {
             : [...prev, questionId]
     );
 
-    // Cargar comentarios solo si no han sido cargados antes
+    // Load the comments for the question if they haven't been loaded yet
     if (!comments[questionId]) {
         try {
             const commentsResponse = await axios.get(`http://localhost:8000/forum/topics/${questionId}/comments/`, {
@@ -114,13 +135,13 @@ export default function Forum() {
                 },
             });
 
-            // Almacena solo el arreglo de comentarios y el total
+            // Store the comments for the question
             setComments((prev) => ({
                 ...prev,
                 [questionId]: commentsResponse.data.comments,
             }));
 
-            // Almacena el total de comentarios
+            // Store the total number of comments for the question
             setTotalCommentsByTopic((prev) => ({
                 ...prev,
                 [questionId]: commentsResponse.data.total_comments,
@@ -131,13 +152,21 @@ export default function Forum() {
     }
 };
 
+  // Get a random color for the tags
+  const getRandomColor = () => {
+    const colors = [
+      "#FF0090", "#00FF6A", "#00D9FF", "#FFD700", "#FF5733", "#6A0DAD", "#FF69B4", "#ADFF2F", "#32CD32"
+    ];
+    return colors[Math.floor(Math.random() * colors.length)];
+  };
 
-  
 
+  // Handle like toggle for questions
   const handleLikeToggle = async (questionId) => {
     try {
       const isLiked = likedQuestions.includes(questionId);
 
+      // Toggle the like
       if (isLiked) {
         await axios.post(
           `http://localhost:8000/forum/likes/`,
@@ -178,12 +207,37 @@ export default function Forum() {
     }
   };
 
-  const filteredQuestions = questions.filter(
-    (question) =>
-      question.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      question.description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
+  // Filter the questions based on the search query, selected tag, and sort order
+  const filteredQuestions = [...questions]
+  .filter((question) => {
+    const matchesSearchQuery = 
+      question.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      question.description.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesSelectedTag = selectedTag ? question.tags.some(tag => tag.name === selectedTag) : true;
+
+    const hasNoComments = totalCommentsByTopic[question.id] === 0;
+
+    if (showUnanswered) {
+      return matchesSearchQuery && matchesSelectedTag && hasNoComments;
+    }
+    return matchesSearchQuery && matchesSelectedTag;
+  })
+  .sort((a, b) => {
+    if (sortBy === "recent") {
+      return new Date(b.post_date) - new Date(a.post_date);
+    } else if (sortBy === "likes") {
+      return (totalLikesByTopic[b.id] || 0) - (totalLikesByTopic[a.id] || 0);
+    } else if (sortBy === "answers") {
+      return (totalCommentsByTopic[b.id] || 0) - (totalCommentsByTopic[a.id] || 0);
+    } else {
+      return 0; 
+    }
+  });
+
+
+  // Handle input change
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewQuestion((prev) => ({
@@ -192,10 +246,12 @@ export default function Forum() {
     }));
   };
 
+  // Handle tag input change
   const handleTagInputChange = (e) => {
     setTagInput(e.target.value);
   };
 
+  // Add a tag to the new question
   const addTag = () => {
     if (tagInput.trim() && !newQuestion.tags.includes(tagInput.trim())) {
       setNewQuestion((prev) => ({
@@ -206,6 +262,7 @@ export default function Forum() {
     }
   };
 
+  // Remove a tag from the new question
   const removeTag = (tagToRemove) => {
     setNewQuestion((prev) => ({
       ...prev,
@@ -213,6 +270,8 @@ export default function Forum() {
     }));
   };
 
+
+  // Handle the form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("New Question Submitted:", newQuestion);
@@ -244,15 +303,17 @@ export default function Forum() {
     setTagInput("");
   };
 
+
+  // Handle comment like toggle
   const handleCommentLikeToggle = async (commentId) => {
     try {
       const isLiked = likedComments.includes(commentId);
   
       if (isLiked) {
-        // Eliminar el like
+        // Delete the like
         await axios.post(
           `http://localhost:8000/forum/likes/`,
-          { comment: commentId },  // El like es para un comentario
+          { comment: commentId },  
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
@@ -266,7 +327,7 @@ export default function Forum() {
           [commentId]: prev[commentId] - 1,
         }));
       } else {
-        // Agregar like
+        // Add the like
         await axios.post(
           `http://localhost:8000/forum/likes/`,
           { comment: commentId },
@@ -289,11 +350,11 @@ export default function Forum() {
   };
   
 
+  // Handle comment submission
   const handleCommentSubmit = async (e, topicId) => {
     e.preventDefault();
 
     try {
-        // Enviar el nuevo comentario
         await axios.post(
             `http://localhost:8000/forum/topics/${topicId}/comments/`,
             {
@@ -308,31 +369,63 @@ export default function Forum() {
             }
         );
 
-        // Limpiar el campo de comentario tras el envío
+        // clear the comment field
         setNewComment((prev) => ({
             ...prev,
-            [topicId]: "" // Limpiar solo el campo del tópico actual
+            [topicId]: "" 
         }));
 
-        // Obtener los comentarios actualizados para ese tópico
         const commentsResponse = await axios.get(`http://localhost:8000/forum/topics/${topicId}/comments/`);
         console.log("Comments Response:", commentsResponse.data);
         
-        // Actualizar solo los comentarios del tópico correspondiente
         setComments((prev) => ({
             ...prev,
-            [topicId]: commentsResponse.data.comments // Cambiado aquí
+            [topicId]: commentsResponse.data.comments 
         }));
 
     } catch (error) {
         console.error("Error posting comment:", error);
     }
     
-};
+  };
 
+  // Handle tag click on the tag section
+  const handleTagClick = async (tag) => {
+    try {
+      setSelectedTag(tag); 
+      setShowTags(false);
+      const response = await axios.get(`http://localhost:8000/forum/topics/?tag=${tag}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      setQuestions(response.data); 
+    } catch (error) {
+      console.error("Error fetching topics by tag:", error);
+    }
+  };
 
-
+  // Fetch the tags
+  const fetchTags = async () => {
+    try {
+      const response = await axios.get("http://localhost:8000/forum/tags/", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`, 
+        },
+      });
+      setTags(response.data); 
+    } catch (error) {
+      console.error("Error fetching tags:", error); 
+    }
+  };
   
+  // Load the tags when the component mounts
+  useEffect(() => {
+    if (showTags) {
+      fetchTags();
+    }
+  }, [showTags]); 
+
 
   return (
     <>
@@ -344,7 +437,7 @@ export default function Forum() {
 
         
         {/* Sidebar */}
-        <div className={`bg-white shadow-lg transition-all duration-300 ${isSidebarExpanded ? "w-64" : "w-16"}`}>
+        <div className={`bg-gray-lg shadow-lg transition-all duration-300 ${isSidebarExpanded ? "w-64" : "w-16"}`}>
           <div className="flex items-center justify-between p-4">
             <span className={`font-semibold ${isSidebarExpanded ? "" : "hidden"}`}>Menú</span>
             <button onClick={toggleSidebar} className="p-2">
@@ -365,8 +458,22 @@ export default function Forum() {
         <main className="flex-1 p-6">
           <h1 className="mb-6 text-3xl font-bold">Foro</h1>
           <div className="mb-6 flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
+          {showTags ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {tags.map((tag, index) => (
+                <button 
+                  key={index} 
+                  className="bg-gray-200 p-4 text-center font-semibold rounded"
+                  style={{ backgroundColor: getRandomColor(), color: "#fff" }}
+                  onClick={() => handleTagClick(tag.name)}
+                >
+                  {tag.name}
+                </button>
+              ))}
+            </div>
+          ) : (
             <div className="relative flex-grow">
-              <Search className="absolute left-2 top-2.5 h-6 w-6 text-gray-500" />
+              <Search className="absolute left-2 top-2.5 h-6 w-5 text-gray-500" />
               <input
                 type="text"
                 placeholder="Search questions..."
@@ -374,24 +481,43 @@ export default function Forum() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
-            </div>
-            <select
+
+              <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
               className="border rounded px-4 py-2"
-            >
+              >
               <option value="recent">Más recientes</option>
               <option value="likes">Más votados</option>
               <option value="answers">Más respondidos</option>
-            </select>
-          </div>
+              </select>
 
-          {/* Questions List */}
+              {selectedTag && (
+                <div className="flex justify-between items-center bg-yellow-100 border border-yellow-500 p-2 rounded">
+                <span>Filtrando por etiqueta: {selectedTag}</span>
+                <button onClick={() => { setSelectedTag(null); fetchQuestionsAndLikes(); }} className="text-red-500">Eliminar filtro</button>
+                </div>
+              )}
+
+              {/* Questions List */}
           <div className="overflow-y-auto h-[calc(100vh-220px)] space-y-4">
           {filteredQuestions.map((question) => (
             <div key={question.id} className="bg-white shadow rounded p-4">
               <h2 className="text-lg font-semibold">{question.title}</h2>
               <p className="text-gray-600">{question.description}</p>
+              
+              <div className="mt-2 flex space-x-2">
+                {question.tags.map((tag, index) => (
+                  <span
+                    key={index}
+                    className="px-2 py-1 text-sm font-bold rounded"
+                    style={{ backgroundColor: getRandomColor(), color: "#fff", border: '1px solid #fff' }}
+                  >
+                    {tag.name}
+                  </span>
+                ))}
+              </div>
+
               <div className="flex justify-between items-center text-sm text-gray-500 mt-4">
                 <span>{question.author} • {new Date(question.post_date).toLocaleDateString()}</span>
                 <div className="flex space-x-4">
@@ -408,10 +534,9 @@ export default function Forum() {
                 </div>
               </div>
           
-              {/* Mostrar comentarios si están abiertos */}
+              {/* Show opened comments */}
               {openAnswers.includes(question.id) && (
               <div className="mt-4 space-y-4">
-                {/* Mostrar los comentarios cargados dinámicamente */}
                 {comments[question.id]?.map((comment) => (
                   <div key={comment.id} className="border-t pt-4">
                     <p className="text-sm font-semibold">{comment.author_name}</p>
@@ -428,7 +553,7 @@ export default function Forum() {
                   </div>
                 ))}
 
-                {/* Formulario para agregar nuevo comentario */}
+                {/* Form  to add a new comment */}
                 <form onSubmit={(e) => handleCommentSubmit(e, question.id)} className="mt-4">
                   <textarea
                     name="comment"
@@ -444,8 +569,11 @@ export default function Forum() {
                 </form>
               </div>
             )}
-            </div>
+          </div>
           ))}
+
+          </div>
+          </div>)}
           </div>
         </main>
 
