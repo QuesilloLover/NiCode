@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db import models
-
+from cloudinary.models import CloudinaryField
 
 class CustomUser(AbstractUser):
     """
@@ -9,7 +9,7 @@ class CustomUser(AbstractUser):
     id = models.AutoField(primary_key=True)
     bio = models.TextField(blank=True)
     elo = models.IntegerField(default=0)
-    profile_image = models.URLField(max_length=255, blank=True)
+    profile_image = CloudinaryField('image')
     guild_id = models.ForeignKey('Guild', null=True, blank=True, on_delete=models.SET_NULL)
     role_guild_id = models.ForeignKey('RoleGuild', null=True, blank=True, on_delete=models.SET_NULL)
 
