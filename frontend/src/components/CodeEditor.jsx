@@ -23,7 +23,7 @@ function CodeEditor() {
     const token = localStorage.getItem('accessToken');
 
     // Harcoded value
-    const problem_id = 14;
+    const problem_id = 26;
     // TODO: fetch all and store them
 
     fetch(`http://localhost:8000/get-initial-code/${problem_id}/${selectedLanguage}`, {
@@ -86,10 +86,12 @@ function CodeEditor() {
 
     const payload = {
       code: value,       
-      language: language 
+      language: language,
+      // Hardcoded
+      problem_id: 26
     };
     
-    fetch(`http://localhost:8000/execute-code/`, {
+    fetch(`http://localhost:8000/execute-problem-code/`, {
       method: 'POST',
       headers: {
           'Authorization': `Token ${token}`,

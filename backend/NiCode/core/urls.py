@@ -23,7 +23,7 @@ urlpatterns = [
     path('', include('forum.urls')),
     path('', include('codeSystem.urls')),
     path('', include('rooms.urls')),
-    path('', include('courses.urls')),
+    path('', include('course.urls')),
     path('', include('chatbot.urls')),
 ]
 

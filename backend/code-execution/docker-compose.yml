@@ -1,4 +1,4 @@
-version: "2.3" #Use this version strictly
+version: "3.8" #Use this version strictly
 services:
   rabbitmq:
     image: "rabbitmq"

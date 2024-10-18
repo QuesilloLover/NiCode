@@ -11,7 +11,7 @@ def compile(file,lang):
         if lang=='c':
             os.system('gcc ' + file)
         elif lang=='cpp':
-            os.system('g++ ' + file)
+            os.system('g++ -std=c++11' + file)
         elif lang=='java':
             os.system('javac ' + file)
         if (os.path.isfile('a.out')) or (os.path.isfile('main.class')):

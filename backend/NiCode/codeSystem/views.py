@@ -78,7 +78,6 @@ class ExecuteCodeView(APIView):
             "PYTHON": "python3",
         }
 
-
         payload = {
             "src": code,
             "stdin":"",
@@ -127,8 +126,7 @@ class ExecuteProblemCodeView(APIView):
     def post(self, request):
         user_code = request.data.get('code', None)
         language = request.data.get('language', None)
-        problem_id = request.data.get('problem', None)
-        print(code, language)
+        problem_id = request.data.get('problem_id', None)
 
         extensions = {
             "CPP": "cpp",
@@ -137,9 +135,10 @@ class ExecuteProblemCodeView(APIView):
             "PYTHON": "python3",
         }
 
-        judgeCode = JudgeCode.objects.get(id=problem_id)
+        judgeCode = JudgeCode.objects.get(problem_id=problem_id, language=Language.objects.get(language_code=language))
 
-        code = apply_user_code(judgeCode.language.language_code, user_code, language)
+        code = apply_user_code(judgeCode.code, user_code, language)
+        print(code, language)
 
         payload = {
             "src": code,
