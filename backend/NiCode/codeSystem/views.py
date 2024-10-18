@@ -21,6 +21,11 @@ class ProblemUploadView(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class ProblemListView(APIView):
+    def get(self, request):
+        problems = Problem.objects.all()
+        serializer = ProblemSerializer(problems, many=True)
+        return Response(serializer.data)
     
 class CategoryListView(APIView):
     def get(self, request):
