@@ -21,3 +21,11 @@ def apply_skeleton(language, testcases_code):
         skeleton_code = skeleton_code.replace('//TESTCASES_GOES_HERE', testcases_code)
 
     return skeleton_code
+
+def apply_user_code(code, user_code, language):
+    if language.upper() == 'PYTHON':
+        final_code = code.replace('#USER_FUNCTION_GOES_HERE', user_code)
+    else:
+        final_code = code.replace('//USER_FUNCTION_GOES_HERE', user_code)
+
+    return final_code

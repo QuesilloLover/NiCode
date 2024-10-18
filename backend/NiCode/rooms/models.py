@@ -2,31 +2,38 @@ from django.db import models
 from users.models import CustomUser
 from codeSystem.models import Problem
 
-class RoomStatus(models.Model):
-    """
-    Available statuses for rooms
-    """
-    status = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.status
-    
-
 class Room(models.Model):
     """
     Collection of rooms made by users
     """
-    room_name = models.CharField(max_length=100)
-    description = models.CharField(max_length=200)
+    ACTIVE = 'active'
+    INACTIVE = 'inactive'
+    CLOSED = 'closed'
+    PENDING = 'pending'
+
+    STATUS_CHOICES = [
+        (ACTIVE, 'Active'),
+        (INACTIVE, 'Inactive'),
+        (CLOSED, 'Closed'),
+        (PENDING, 'Pending'),
+    ]
+
+    room_name = models.CharField(max_length=100, unique=True)
+    description = models.TextField(null=True, blank=True)
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    status = models.ForeignKey(RoomStatus, on_delete=models.CASCADE)
+    status = models.CharField(
+        max_length=100,
+        choices=STATUS_CHOICES,
+        default=PENDING,
+    )
+    private = models.BooleanField(default=False)
+    key = models.CharField(max_length=100, null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.room_name
-
 
 class RoomMembers(models.Model):
     """
@@ -42,7 +49,7 @@ class RoomMembers(models.Model):
 
 class ProblemSet(models.Model):
     id = models.AutoField(primary_key=True)
-    room_id = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='problem_sets')
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='problem_sets', default=1)
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE, related_name='problem_sets')
     added_at = models.DateTimeField(auto_now_add=True)
 

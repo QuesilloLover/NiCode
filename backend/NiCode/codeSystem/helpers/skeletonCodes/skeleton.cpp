@@ -20,11 +20,12 @@ template <typename T>
 std::string printResult(std::vector<T> result)
 {
     std::stringstream ss;
-    for (const auto& element : result) 
+    for (size_t i = 0; i < result.size(); ++i)
     {
-        ss << element << " ";
+        ss << result[i] << " ";
     }
     return ss.str();
+
 }
     
 //USER_FUNCTION_GOES_HERE
