@@ -1,20 +1,28 @@
-from rest_framework import status
+from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework import status
 from rest_framework.permissions import AllowAny
 from .models import CustomUser
+from rest_framework.authtoken.models import Token
 from .serializers import CustomUserSerializer
 
-@api_view(['GET', 'POST'])
-def custom_user_detail(request):
-    if request.method == 'GET':
-        user = request.user
+class CustomUserDetail(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        access_token = request.headers.get('Authorization').split(' ')[1]
+        token = Token.objects.get(key=access_token)
+        user = token.user
         serializer = CustomUserSerializer(user)
+        
         return Response(serializer.data)
 
-    elif request.method == 'POST':
+    def post(self, request, *args, **kwargs):
+        # Obtener el usuario autenticado
         user = request.user
         data = request.data
+        
+        # Serializar los datos parcialmente, permitiendo que algunos campos estén ausentes
         serializer = CustomUserSerializer(user, data=data, partial=True)
 
         if serializer.is_valid():
