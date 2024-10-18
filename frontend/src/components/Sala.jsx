@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import NiCode from "../assets/NiCode.png";
 import JoinByCodeModal from "@/JoinByCodeModal";
 import Header from './components_layouts/header'
 
-import { useState } from "react"
 import { Link } from "react-router-dom"
 import ReactMarkdown from 'react-markdown'
 import { Button } from "@/components/ui/button"
@@ -69,7 +67,7 @@ export default function Component() {
   }
 
   return (
-    <>
+    <div>
       {/* Header */}
       <Header/>
 
