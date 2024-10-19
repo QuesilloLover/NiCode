@@ -17,7 +17,8 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_discard(self.room_name, self.channel_name)
 
     async def receive(self, text_data):
-        self.user_id = self.scope['url_route']['kwargs']['user_id']
+        self.user_id = self.scope['user'].id
+        print(self.user_id)
 
         if self.user_id not in user_queue:
             user_queue.append(self.user_id)
