@@ -252,16 +252,20 @@ export default function Forum() {
   // Handle tag input change
   const handleTagInputChange = (e) => {
     setTagInput(e.target.value);
+    console.log("Tag Input:", tagInput);
   };
 
+
   // Add a tag to the new question
-  const addTag = () => {
-    if (tagInput.trim() && !newQuestion.tags.includes(tagInput.trim())) {
+  const addTag = (tagFromClick = null) => {
+    const tagToAdd = typeof tagFromClick === "string" ? tagFromClick.trim() : tagInput.trim();
+  
+    if (tagToAdd && !newQuestion.tags.includes(tagToAdd)) {
       setNewQuestion((prev) => ({
         ...prev,
-        tags: [...prev.tags, tagInput.trim()],
+        tags: [...prev.tags, tagToAdd],
       }));
-      setTagInput("");
+      setTagInput(""); 
     }
   };
 
@@ -416,11 +420,19 @@ export default function Forum() {
           Authorization: `Bearer ${accessToken}`, 
         },
       });
-      setTags(response.data); 
+  
+      // Filtrar las etiquetas duplicadas
+      const fetchedTags = response.data;
+      const uniqueTags = fetchedTags.filter(
+        (fetchedTag) => !tags.some((tag) => tag.name === fetchedTag.name)
+      );
+  
+      setTags((prevTags) => [...prevTags, ...uniqueTags]); // Agregar solo las etiquetas únicas
     } catch (error) {
       console.error("Error fetching tags:", error); 
     }
   };
+  
   
   // Load the tags when the component mounts
   useEffect(() => {
@@ -562,7 +574,8 @@ export default function Forum() {
                   <textarea
                     name="comment"
                     rows="3"
-                    className="w-full border rounded p-2"
+                  
+                    className="w-full border rounded p-2 text-gray-800"
                     placeholder="Write a comment..."
                     value={newComment[question.id] || ""}
                     onChange={(e) => setNewComment({ ...newComment, [question.id]: e.target.value })}
@@ -628,10 +641,11 @@ export default function Forum() {
                   <div className="flex flex-wrap gap-4 mt-5">
                         {tags.map((tag, index) => (
                         <button 
-                          key={index} 
+                          key={index}
+                          value= {tag.name}
                           className="bg-gray-200 text-sm p-2 text-center font-semibold rounded w-full sm:w-auto"
                           style={{ backgroundColor: getRandomColor(), color: "#fff" }}
-                          onClick={() => handleTagClick(tag.name)}
+                          onClick={() => addTag(tag.name)}
                         >
                           {tag.name}
                         </button>

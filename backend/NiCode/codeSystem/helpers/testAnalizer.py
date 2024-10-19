@@ -1,5 +1,4 @@
 import re
-import test
 
 
 def testAnalyzer(string):

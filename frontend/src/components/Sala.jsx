@@ -69,7 +69,7 @@ export default function Component() {
   useEffect(() => {
     const fetchRooms = async () => {
       try {
-          // Get all the available topics
+          // Get all the available rooms
           const response = await axios.get('http://localhost:8000/rooms/', {
               headers: {
                   Authorization: `Bearer ${accessToken}`,
