@@ -10,7 +10,7 @@ const AuthButtons = () => {
       {/* Contenedor de los botones */}
       <div className="flex items-center justify-center space-x-4">
         {/* Botón de Registrarse */}
-        <Link to="login" className="relative inline-flex items-center px-6 py-3 bg-green-500 text-black font-bold rounded-full hover:bg-green-400 transition-colors duration-300">
+        <Link to="register" className="relative inline-flex items-center px-6 py-3 bg-green-500 text-black font-bold rounded-full hover:bg-green-400 transition-colors duration-300">
           Registrarse
         </Link>
         
@@ -18,7 +18,7 @@ const AuthButtons = () => {
         <span className="text-xl">o</span>
 
         {/* Botón de Iniciar Sesión */}
-        <Link to="register" className="transition ease-in-out relative inline-flex items-center px-6 py-3 bg-green-500 text-black font-bold rounded-full hover:bg-green-400 transition-colors duration-300">
+        <Link to="login" className="transition ease-in-out relative inline-flex items-center px-6 py-3 bg-green-500 text-black font-bold rounded-full hover:bg-green-400 transition-colors duration-300">
           Iniciar Sesión
         </Link>
       </div>
