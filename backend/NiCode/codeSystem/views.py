@@ -3,8 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated # work this
-from .models import Problem, Category, Language, InitialCode, JudgeCode
-from .serializers import ProblemSerializer, CategorySerializer, TestCasesUploadSerializer, InitialCodeSerializer
+from .models import Problem, Category, Language, InitialCode, JudgeCode, UserSolverProblem
+from .serializers import ProblemSerializer, CategorySerializer, TestCasesUploadSerializer, InitialCodeSerializer, UserSolverProblemSerializer, ProblemSerializerNoParams
 from .helpers.applySkeleton import apply_user_code
 from .helpers.testAnalizer import testAnalyzer
 import requests
@@ -34,6 +34,22 @@ class CategoryListView(APIView):
         serializer = CategorySerializer(categories, many=True)
         return Response(serializer.data)
     
+class ProblemCompletionListView(APIView):
+    def get(self, request):
+        user = request.user  
+
+        problems = Problem.objects.all()
+
+        serializer = ProblemSerializerNoParams(problems, many=True)
+
+        for problem_data in serializer.data:
+            problem_id = problem_data['id']
+            # Check if the user has solved the problem
+            is_completed = UserSolverProblem.objects.filter(user=user, problem_id=problem_id).exists()
+            problem_data['is_completed'] = is_completed
+
+        return Response(serializer.data)
+
 class GetProblemView(APIView):
     def get(self, request, id=None):
         if id is not None: 

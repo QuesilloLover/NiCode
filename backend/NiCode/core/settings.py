@@ -206,3 +206,9 @@ SOCIAL_AUTH_GOOGLE_SECRET = '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'
 LOGIN_REDIRECT_URL = '/'
 
 ASGI_APPLICATION = "core.asgi.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    } 
+}

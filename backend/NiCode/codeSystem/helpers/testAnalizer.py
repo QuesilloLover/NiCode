@@ -1,6 +1,4 @@
 import re
-import test
-
 
 def testAnalyzer(string):
     separator = 'SEPARATOR_GOES_HERE\n'
