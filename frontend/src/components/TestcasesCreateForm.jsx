@@ -60,8 +60,8 @@ const TestCaseAddPage = () => {
             .join('|');
 
         const newTestCase = {
-            input: inputStr,  // Use the formatted string for inputs
-            output: testCase.output // Assuming you're also capturing the output
+            input: inputStr,  
+            output: testCase.output 
         };
 
         setTestCases([...testCases, newTestCase]);

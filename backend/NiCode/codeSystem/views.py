@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated # work this
 from .models import Problem, Category, Language, InitialCode, JudgeCode
 from .serializers import ProblemSerializer, CategorySerializer, TestCasesUploadSerializer, InitialCodeSerializer
 from .helpers.applySkeleton import apply_user_code
+from .helpers.testAnalizer import testAnalyzer
 import requests
 import time
 
@@ -174,15 +175,25 @@ class ExecuteProblemCodeView(APIView):
             
             output = data.get('output', '')
             stderr = data.get('stderr', '')
-            status_code = data.get('status', '').strip() 
-            
-            # Return the output, stderr, and status back to the client
-            return Response({
+
+            if stderr != '':
+                return Response({
                 'output': output,
                 'stderr': stderr,
                 'status': status_code
             }, status=status.HTTP_200_OK)
             
+            test_dict = testAnalyzer(output)
+            print(test_dict)
+
+            return Response({
+                'testResults': test_dict.get('testResults'),
+                'isCorrect': test_dict.get('isCorrect'),
+                'totalTestcases': test_dict.get('totalTestcases'),
+                'badTestcase': test_dict.get('badTestcase')
+            }, status=status.HTTP_200_OK)
+
+
         except requests.exceptions.HTTPError as http_err:
             return Response({'detail': str(http_err)}, status=status.HTTP_400_BAD_REQUEST)
         except requests.exceptions.RequestException as err:
