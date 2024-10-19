@@ -66,21 +66,15 @@ export default function Home() {
   return (
     <div>
 
-      {isLoggedIn ? (
-        <>
-      <h2>Hola, {username}! UwU</h2>
-      <button onClick={handleLogout}>Salir</button>
-      </>
-      ):(
+    (
         <> 
           <Header/>
           <HomeScreen />
           <WhatIsNicode />
           <AuthHome/>
         </>
+      )
         
-        
-    )}
     </div>
   )
 }

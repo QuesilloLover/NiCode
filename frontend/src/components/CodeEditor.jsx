@@ -8,60 +8,59 @@ import { githubLight, githubDark } from '@uiw/codemirror-theme-github';
 import { dracula } from '@uiw/codemirror-theme-dracula';
 import { darcula } from '@uiw/codemirror-theme-darcula';
 import { xcodeLight, xcodeDark } from '@uiw/codemirror-theme-xcode';
+import {X, Save, RotateCcw } from 'lucide-react'
 import './CodeEditor.css';
+import { useParams } from 'react-router-dom';
 
-function CodeEditor() {
-  const [language, setLanguage] = useState('python'); // default language
-  const [value, setValue] = useState("print('Hello, world!')"); // initial code
-  const [theme, setTheme] = useState(dracula); // default theme
-  const [codeResult, setCodeResult] = useState("Ejecuta tu código para ver los resultados");
+function CodeEditor( {problemId: problemIdProp, parentCallback } ) {
+  const { problemId: problemIdFromUrl } = useParams();  // Fetch problemId from URL
+  // Use the prop value if available, otherwise fall back to the URL parameter
+  const problemId = problemIdProp || problemIdFromUrl;
 
+  const [language, setLanguage] = useState('python');
+  const [value, setValue] = useState("print('Hello, world!')");
+  const [theme, setTheme] = useState(dracula);
+  const [codeResult, setCodeResult] = useState(null);
 
   const handleLanguageChange = (e) => {
     const selectedLanguage = e.target.value;
     setLanguage(selectedLanguage);
     const token = localStorage.getItem('accessToken');
 
-    // Harcoded value
-    const problem_id = 26;
-    // TODO: fetch all and store them
-
-    fetch(`http://localhost:8000/get-initial-code/${problem_id}/${selectedLanguage}`, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Token ${token}`,
-            'Content-Type': 'application/json',
-        },
-    }).then(response => response.json())    
-    .then(data => {
-      console.log(data)
-      setValue(data.code);
+    fetch(`http://localhost:8000/get-initial-code/${problemId}/${selectedLanguage}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Token ${token}`,
+        'Content-Type': 'application/json',
+      },
     })
-    .catch(error => {
-      console.error('Error fetching categories:', error);
-    });   
-
-
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        setValue(data.code);
+      })
+      .catch(error => {
+        console.error('Error fetching categories:', error);
+      });
   };
+  
 
   const getLanguageExtension = () => {
     switch (language) {
       case 'python':
         return python();
-        case 'cpp':
-            return cpp(); 
-        case 'java':
-            return java(); 
-        case 'javascript':
-            return javascript(); 
+      case 'cpp':
+        return cpp();
+      case 'java':
+        return java();
+      case 'javascript':
+        return javascript();
       default:
         return python();
     }
   };
 
-  // Function to change the theme dynamically
   const getTheme = (theme) => {
-
     switch (theme) {
       case 'githubLight':
         return githubLight;
@@ -80,39 +79,53 @@ function CodeEditor() {
     }
   };
 
-  // Function to handle code execution (mock function)
   const runCode = () => {
     const token = localStorage.getItem('accessToken');
 
     const payload = {
-      code: value,       
+      code: value,
       language: language,
-      // Hardcoded
-      problem_id: 26
+      problem_id: problemId
     };
-    
+
     fetch(`http://localhost:8000/execute-problem-code/`, {
       method: 'POST',
       headers: {
-          'Authorization': `Token ${token}`,
-          'Content-Type': 'application/json',
+        'Authorization': `Token ${token}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(payload),
-    }).then(response => response.json())    
-    .then(data => {
-      setCodeResult(`Output: ${data.output}`);
     })
-    .catch(error => {
-      console.error('Error fetching categories:', error);
-    });   
-
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        setCodeResult(data);
+      })
+      .catch(error => {
+        console.error('Error fetching categories:', error);
+      });
   };
 
- 
+  const renderTestResults = (testResults) => {
+    return testResults.map((result, index) => {
+      const [params, expected, actual] = result.split('|');
+      return (
+        <div key={index} className="mb-2 p-2 bg-green-100 rounded text-black">
+          <div className="font-semibold">Test Case {index + 1}:</div>
+          <div>Parámetros: {params}</div>
+          <div>Salida esperada: {expected}</div>
+          <div>Salida actual: {actual}</div>
+        </div>
+      );
+    });
+  };
+
   return (
-    <div className="content w-full" id="right">
-      <div className="content-header ">
-        <div className="select-dropdown text-green-700">
+    <div className="content w-full flex flex-col" id="right">
+
+      <div className="flex justify-between">
+      <div className="content-header">
+        <div className="select-dropdown text-[#050054]">
           <select id="language-selector" value={language} onChange={handleLanguageChange}>
             <option value="CPP">C++</option>
             <option value="JAVA">Java</option>
@@ -121,7 +134,7 @@ function CodeEditor() {
           </select>
         </div>
 
-        <div className="select-dropdown text-green-700">
+        <div className="select-dropdown text-[#050054]" >
           <select id="theme-select" value={theme} onChange={(e) => setTheme(e.target.value)}>
             <option value="githubLight">GitHub Light</option>
             <option value="githubDark">GitHub Dark</option>
@@ -131,32 +144,32 @@ function CodeEditor() {
             <option value="xcodeDark">Xcode Dark</option>
           </select>
         </div>
+      </div>
 
-        <div className="icons text-stone-950">
-          <button className="icon" id="screen">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/>
-            </svg>
+      <div className='flex justify-end'>
+        <div className="flex flex-row space-x-2 ">
+          <button  className="icons flex">
+            <Save color='#050054'/>
           </button>
-          <button className="icon" onClick={() => setValue("print('Hello, world!')")}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rotate-ccw"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>
-            </svg>
+          <button  className="icons flex" onClick={() => ("print('Hello, world!')")}>
+            <RotateCcw color='#050054'/>
           </button>
-          <button className="icon" onClick={() => alert('Code saved!')}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-save"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/>
-            </svg>
+          <button className="icons flex" onClick={() => alert('Code saved!')}>
+            <X color='#050054'/>
           </button>
         </div>
       </div>
 
+      </div>
+
       <div className="working-space">
         <div className="editor-area">
-          {/* CodeMirror editor component */}
           <CodeMirror
             value={value}
             height="400px"
             theme={getTheme(theme)}
             extensions={[getLanguageExtension()]}
-            onChange={(val) => setValue(val)}
+            onChange={(val) => {setValue(val); parentCallback(val);}}
           />
         </div>
 
@@ -169,8 +182,25 @@ function CodeEditor() {
         <div className="console">
           <div className="console-area">
             <div className="test-row"></div>
-            <div className="test-area">
-              <div id="placeholder">{codeResult}</div>
+            <div className="test-area overflow-y-scroll">
+              {codeResult ? (
+                <div className={`p-4 rounded-lg`}>
+                  <h3 className={`text-lg font-bold ${codeResult.isCorrect ? 'text-green-700' : 'text-red-700'}`}>
+                    {codeResult.isCorrect ? '¡Todas las pruebas aprobadas!' : 'Algunas pruebas fallaron.'}
+                  </h3>
+                  <p className="text-gray-700">
+                    Test cases: {codeResult.badTestcase === null ? 
+                      `${codeResult.totalTestcases}/${codeResult.totalTestcases}` : 
+                      `${codeResult.badTestcase}/${codeResult.totalTestcases}`}
+                  </p>
+                  <div className="mt-4">
+                    <h4 className="font-semibold mb-2 text-black" >Resultados de las pruebas:</h4>
+                    {renderTestResults(codeResult.testResults)}
+                  </div>
+                </div>
+              ) : (
+                <div id="placeholder">Ejectua tu código para ver los resultados</div>
+              )}
             </div>
           </div>
           <div className="button-row">
@@ -184,6 +214,6 @@ function CodeEditor() {
       </div>
     </div>
   );
-};
+}
 
 export default CodeEditor;

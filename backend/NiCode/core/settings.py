@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'course',
     'chatbot',
     'django_extensions',
+    'channels',
     'corsheaders',
     'django.contrib.sites',
     'rest_framework',
