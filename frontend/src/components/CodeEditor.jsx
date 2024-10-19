@@ -22,10 +22,100 @@ function CodeEditor( {problemId: problemIdProp, parentCallback } ) {
   const [theme, setTheme] = useState(dracula);
   const [codeResult, setCodeResult] = useState(null);
 
+    // Cargar la selección desde localStorage cuando el componente se monte
+    useEffect(() => {
+      const savedLanguage = localStorage.getItem('selectedLanguage');
+      const savedTheme = localStorage.getItem('selectedTheme');
+      const savedValue = localStorage.getItem('editorContent');
+      if (savedLanguage) {
+        setLanguage(savedLanguage);
+      }
+      if (savedTheme) {
+        setTheme(savedTheme);
+      }
+      if (savedValue) {
+        setValue(savedValue);
+      }
+    }, []);
+
+
+    useEffect(() => {
+      const savedValue = localStorage.getItem('editorContent');
+      if (savedValue) {
+        setValue(savedValue);
+      }
+    }, []);
+
+    // Manejar el cambio de contenido del editor
+    const handleEditorChange = (val) => {
+      setValue(val);
+      localStorage.setItem('editorContent', val);
+      parentCallback(val);
+    };
+
+    // Guardar el contenido del editor manualmente
+    const handleSave = () => {
+      localStorage.setItem('editorContent', value);
+      alert('Code saved!');
+    };
+
+    
+
+    // Cargar la selección desde localStorage cuando el componente se monte
+    useEffect(() => {
+      const savedLanguage = localStorage.getItem('selectedLanguage');
+      const savedTheme = localStorage.getItem('selectedTheme');
+      if (savedLanguage) {
+        setLanguage(savedLanguage);
+      }
+      if (savedTheme) {
+        setTheme(savedTheme);
+      }
+    }, []);
+
+    const handleLanguageChangeLocalStorage = (e) => {
+      const selectedLanguage = e.target.value;
+      setLanguage(selectedLanguage);
+      localStorage.setItem('selectedLanguage', selectedLanguage);
+
+      let defaultText = '';
+      switch (selectedLanguage) {
+        case 'CPP':
+          defaultText = '#include <iostream>\nint main() {\n    std::cout << "Hello, world!";\n    return 0;\n}';
+          break;
+        case 'JAVA':
+          defaultText = 'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, world!");\n    }\n}';
+          break;
+        case 'PYTHON':
+          defaultText = 'print("Hello, world!")';
+          break;
+        default:
+          defaultText = '';
+      }
+      setValue(defaultText);
+      localStorage.setItem('editorContent', defaultText);
+
+    };
+  
+    // Manejar el cambio de tema
+    const handleThemeChangeLocalStorage = (e) => {
+      const selectedTheme = e.target.value;
+      setTheme(selectedTheme);
+      localStorage.setItem('selectedTheme', selectedTheme);
+    };
+
   const handleLanguageChange = (e) => {
     const selectedLanguage = e.target.value;
     setLanguage(selectedLanguage);
     const token = localStorage.getItem('accessToken');
+
+  const handleSelectChange = (e) => {
+    if (!localStorage.getItem('editorContent')) {
+      handleLanguageChange(e);
+    } else {
+      handleLanguageChangeLocalStorage(e);
+    }
+  };
 
     fetch(`http://localhost:8000/get-initial-code/${problemId}/${selectedLanguage}`, {
       method: 'GET',
@@ -124,37 +214,37 @@ function CodeEditor( {problemId: problemIdProp, parentCallback } ) {
     <div className="content w-full flex flex-col" id="right">
 
       <div className="flex justify-between">
-      <div className="content-header">
-        <div className="select-dropdown text-[#050054]">
-          <select id="language-selector" value={language} onChange={handleLanguageChange}>
-            <option value="CPP">C++</option>
-            <option value="JAVA">Java</option>
-            <option value="C">C</option>
-            <option value="PYTHON">Python</option>
-          </select>
-        </div>
+      <div className='flex justify-between p-1'>
+          <div className="select-dropdown text-[#050054]">
+            {/* Si no hay nada en el local storage, buscar en la API */}
+            <select id="language-selector" value={language} onChange={handleLanguageChange}>
+              <option value="CPP">C++</option>
+              <option value="JAVA">Java</option>
+              <option value="PYTHON">Python</option>
+            </select>
+          </div>
 
-        <div className="select-dropdown text-[#050054]" >
-          <select id="theme-select" value={theme} onChange={(e) => setTheme(e.target.value)}>
-            <option value="githubLight">GitHub Light</option>
-            <option value="githubDark">GitHub Dark</option>
-            <option value="dracula">Dracula</option>
-            <option value="darcula">Darcula</option>
-            <option value="xcodeLight">Xcode Light</option>
-            <option value="xcodeDark">Xcode Dark</option>
-          </select>
-        </div>
+          <div className="select-dropdown text-[#050054]">
+            <select id="theme-select" value={theme} onChange={handleThemeChangeLocalStorage}>
+              <option value="githubLight">GitHub Light</option>
+              <option value="githubDark">GitHub Dark</option>
+              <option value="dracula">Dracula</option>
+              <option value="darcula">Darcula</option>
+              <option value="xcodeLight">Xcode Light</option>
+              <option value="xcodeDark">Xcode Dark</option>
+            </select>
+          </div>
       </div>
 
       <div className='flex justify-end'>
         <div className="flex flex-row space-x-2 ">
-          <button  className="icons flex">
+          <button  className="icons flex" onClick={() => alert('Code saved!')}>
             <Save color='#050054'/>
           </button>
           <button  className="icons flex" onClick={() => ("print('Hello, world!')")}>
             <RotateCcw color='#050054'/>
           </button>
-          <button className="icons flex" onClick={() => alert('Code saved!')}>
+          <button className="icons flex" >
             <X color='#050054'/>
           </button>
         </div>
@@ -169,7 +259,7 @@ function CodeEditor( {problemId: problemIdProp, parentCallback } ) {
             height="400px"
             theme={getTheme(theme)}
             extensions={[getLanguageExtension()]}
-            onChange={(val) => {setValue(val); parentCallback(val);}}
+            onChange={handleEditorChange}
           />
         </div>
 
@@ -182,7 +272,7 @@ function CodeEditor( {problemId: problemIdProp, parentCallback } ) {
         <div className="console">
           <div className="console-area">
             <div className="test-row"></div>
-            <div className="test-area overflow-y-scroll">
+            <div className="test-area overflow-y-scroll mt-10">
               {codeResult ? (
                 <div className={`p-4 rounded-lg`}>
                   <h3 className={`text-lg font-bold ${codeResult.isCorrect ? 'text-green-700' : 'text-red-700'}`}>
@@ -199,7 +289,7 @@ function CodeEditor( {problemId: problemIdProp, parentCallback } ) {
                   </div>
                 </div>
               ) : (
-                <div id="placeholder">Ejectua tu código para ver los resultados</div>
+                <div id="placeholder">Ejecuta tu código para ver los resultados</div>
               )}
             </div>
           </div>

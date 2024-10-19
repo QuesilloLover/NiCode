@@ -1,6 +1,5 @@
 import re
 
-
 def testAnalyzer(string):
     separator = 'SEPARATOR_GOES_HERE\n'
     segments = string.split(separator)
