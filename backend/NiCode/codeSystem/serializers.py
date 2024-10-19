@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Problem, Category, Language, Parameter, JudgeCode, InitialCode, TestCase
+from .models import Problem, Category, Language, Parameter, JudgeCode, InitialCode, TestCase, UserSolverProblem
 from .helpers.generateInitialCode import generateInitialCode
 from .helpers.generateTestcases import generateTestcases
 from .helpers.applySkeleton import apply_skeleton
@@ -19,7 +19,12 @@ class ProblemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Problem
-        fields = ['id','name', 'function_name', 'description', 'category', 'parameters']
+        fields = ['id', 'name', 'function_name', 'description', 'category', 'difficulty', 'parameters']
+
+class ProblemSerializerNoParams(serializers.ModelSerializer):
+    class Meta:
+        model = Problem
+        fields = ['id', 'name', 'function_name', 'description', 'category', 'difficulty']
 
     def create(self, validated_data):
         parameters_data = validated_data.pop('parameters')
@@ -104,3 +109,9 @@ class InitialCodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = InitialCode
         fields = ['problem', 'language', 'code'] 
+
+class UserSolverProblemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserSolverProblem
+        fields = ['id', 'user', 'problem', 'code', 'solved_at']
+        read_only_fields = ['id', 'solved_at'] 
