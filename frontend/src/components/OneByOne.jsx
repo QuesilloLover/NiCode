@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import JoinByCodeModal from "@/JoinByCodeModal";
 import Header from "./components_layouts/header";
 
@@ -29,16 +30,7 @@ import { Check, Lock, Globe, Plus } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
 export default function Component() {
-  const [rooms, setRooms] = useState([
-    { name: "Sala 1", creator: "User 01", users: "4/10", visibility: "Privada" },
-    { name: "Sala 2", creator: "User 05", users: "10/10", visibility: "Pública" },
-    { name: "Sala 3", creator: "User 10", users: "9/10", visibility: "Pública" },
-    { name: "Sala 4", creator: "User 07", users: "3/10", visibility: "Privada" },
-    { name: "Sala 5", creator: "User 04", users: "2/10", visibility: "Pública" },
-    { name: "Sala 6", creator: "User 02", users: "4/10", visibility: "Privada" },
-    { name: "Sala 7", creator: "User 06", users: "5/10", visibility: "Privada" },
-  ]);
-
+  const [rooms, setRooms] = useState([]);
   const [showJoinModal, setShowJoinModal] = useState(false);
   const [joinCode, setJoinCode] = useState("");
 
@@ -50,6 +42,28 @@ export default function Component() {
     key: "",
   });
 
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      console.error("No auth token found in localStorage");
+      return;
+    }
+
+    const config = {
+      headers: { Authorization: `Token ${token}` }
+    };
+
+    // Fetch data from API
+    axios.get("http://localhost:8000/problems/completion/", config)
+      .then(response => {
+        console.log("Data fetched successfully!", response.data);
+        setRooms(response.data);
+      })
+      .catch(error => {
+        console.error("There was an error fetching the data!", error);
+      });
+  }, []);
+
   const handleJoinByCode = () => {
     console.log("Joining room with code:", joinCode);
     setShowJoinModal(false);
@@ -57,9 +71,32 @@ export default function Component() {
   };
 
   const handleCreateRoom = () => {
-    console.log("Creating new room:", newRoom);
-    setShowCreateModal(false);
-    setNewRoom({ name: "", description: "", isPrivate: false, key: "" });
+    const token = localStorage.getItem('accessToken');
+    const payload = {
+      name: newRoom.name,
+      description: newRoom.description,
+      isPrivate: newRoom.isPrivate,
+      key: newRoom.key,
+    };
+
+    fetch("http://localhost:8000/problems/completion/", {
+      method: 'POST',
+      headers: {
+        'Authorization': `Token ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log("Room created successfully!", data);
+      setRooms([...rooms, data]);
+      setShowCreateModal(false);
+      setNewRoom({ name: "", description: "", isPrivate: false, key: "" });
+    })
+    .catch(error => {
+      console.error("There was an error creating the room!", error);
+    });
   };
 
   return (
@@ -218,4 +255,3 @@ export default function Component() {
     </div>
   );
 }
-

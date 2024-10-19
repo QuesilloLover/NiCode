@@ -1,78 +1,52 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-class SequentialText extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      displayedText: '',
-      currentIndex: 0,
-    };
-    this.timeoutId = null; // Asegúrate de inicializar el timeoutId
-  }
+const TypingAnimation = () => {
+  const words = ['Python', 'Algoritmos', 'Logica', 'Programacion'];
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [displayedText, setDisplayedText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [charIndex, setCharIndex] = useState(0);
+  const [typingSpeed, setTypingSpeed] = useState(200);
 
-  componentDidMount() {
-    this.animateText();
-  }
+  useEffect(() => {
+    let typingTimeout;
 
-  componentWillUnmount() {
-    clearTimeout(this.timeoutId); // Limpia el timeout cuando el componente se desmonte
-  }
-
-  animateText = () => {
-    const { text, speed } = this.props;
-    const { currentIndex } = this.state;
-
-    if (currentIndex < text.length) {
-      this.setState(
-        (prevState) => ({
-          displayedText: prevState.displayedText + text[prevState.currentIndex], // Añade letra
-          currentIndex: prevState.currentIndex + 1, // Incrementa el índice
-        }),
-        () => {
-          this.timeoutId = setTimeout(this.animateText, speed); // Programa el siguiente paso
-        }
-      );
+    if (isDeleting) {
+      // Borrar letra por letra
+      if (charIndex > 0) {
+        setDisplayedText((prev) => prev.substring(0, prev.length - 1));
+        setCharIndex((prev) => prev - 1);
+        typingTimeout = setTimeout(() => setTypingSpeed(typingSpeed), typingSpeed);
+      } else {
+        // Cambiar al siguiente texto después de eliminar
+        setIsDeleting(false);
+        setCurrentWordIndex((prev) => (prev + 1) % words.length);
+        typingTimeout = setTimeout(() => setTypingSpeed(1000), typingSpeed);
+      }
     } else {
-      this.timeoutId = setTimeout(this.resetAnimation, 5000); // Reinicia la animación tras 5 segundos
+      // Escribir letra por letra
+      if (charIndex < words[currentWordIndex].length) {
+        setDisplayedText((prev) => prev + words[currentWordIndex].charAt(charIndex));
+        setCharIndex((prev) => prev + 1);
+        typingTimeout = setTimeout(() => setTypingSpeed(typingSpeed), typingSpeed);
+      } else {
+        // Pausa antes de empezar a borrar
+        typingTimeout = setTimeout(() => setIsDeleting(true), 1000);
+      }
     }
-  };
 
-  resetAnimation = () => {
-    this.setState({ displayedText: '', currentIndex: 0 }, this.animateText);
-  };
+    return () => clearTimeout(typingTimeout);
+  }, [charIndex, isDeleting, currentWordIndex, typingSpeed, words]);
 
-  render() {
-    return (
-      <div
-        style={{
-          minHeight: '100px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: '#f3f4f6',
-          padding: '1rem',
-          borderRadius: '0.5rem',
-        }}
-      >
-        <p
-          style={{
-            fontSize: '1.5rem',
-            fontWeight: 'bold',
-            color: '#1f2937',
-          }}
-        >
-          {this.state.displayedText}
-        </p>
-      </div>
-    );
-  }
-}
-
-SequentialText.defaultProps = {
-  text: 'Hola, mundo!',
-  speed: 100,
+  return (
+    <div style={{ fontFamily: 'monospace', fontSize: '30px' }}> {/* Aumenta el tamaño de la fuente */}
+      <span style={{ color: 'white' }}>Aprende </span>
+      <span style={{ color: '#22c55e' }}>{displayedText}</span> {/* Cambia el color a #22c55e */}
+      <span className="cursor" style={{ borderLeft: '2px solid black', marginLeft: '2px' }}></span>
+    </div>
+  );
 };
 
-export default function Component(props = { text: 'Hola, mundo!', speed: 100 }) {
-  return <SequentialText {...props} />;
-}
+export default TypingAnimation;
+
+
