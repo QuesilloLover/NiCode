@@ -12,6 +12,7 @@ import ProblemCreateForm from './components/ProblemCreateForm';
 import AddTestCaseForm from './components/TestcasesCreateForm';
 import Profile from './components/profile/Profile_view';
 import Forum from './components/Forum';
+import Modes from './components/Modes'
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="coding" element={<Coding/>}   />
           <Route path="forum" element={<Forum/>}   />
           <Route path='profile' element={<Profile/>}  />
+          <Route path='modes' element={<Modes/>} />
         </Route>
       </Routes>
     </BrowserRouter>

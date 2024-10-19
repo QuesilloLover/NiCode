@@ -1,15 +1,12 @@
 import React, { useState } from "react";
-import NiCode from "../assets/NiCode.png";
 import JoinByCodeModal from "@/JoinByCodeModal";
-import Header from './components_layouts/header'
+import Header from "./components_layouts/header";
 
-import { Link } from "react-router-dom"
-import ReactMarkdown from 'react-markdown'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
-import { Textarea } from "@/components/ui/textarea"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
   DialogContent,
@@ -18,7 +15,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import {
   Table,
   TableBody,
@@ -26,9 +23,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Check, Lock, Globe, Plus } from "lucide-react"
+} from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Check, Lock, Globe, Plus } from "lucide-react";
+import ReactMarkdown from "react-markdown";
 
 export default function Component() {
   const [rooms, setRooms] = useState([
@@ -39,45 +37,46 @@ export default function Component() {
     { name: "Sala 5", creator: "User 04", users: "2/10", visibility: "Pública" },
     { name: "Sala 6", creator: "User 02", users: "4/10", visibility: "Privada" },
     { name: "Sala 7", creator: "User 06", users: "5/10", visibility: "Privada" },
-  ])
+  ]);
 
-  const [showJoinModal, setShowJoinModal] = useState(false)
-  const [joinCode, setJoinCode] = useState("")
+  const [showJoinModal, setShowJoinModal] = useState(false);
+  const [joinCode, setJoinCode] = useState("");
 
-  const [showCreateModal, setShowCreateModal] = useState(false)
+  const [showCreateModal, setShowCreateModal] = useState(false);
   const [newRoom, setNewRoom] = useState({
     name: "",
     description: "",
     isPrivate: false,
     key: "",
-  })
+  });
 
   const handleJoinByCode = () => {
-    // Implement join logic here
-    console.log("Joining room with code:", joinCode)
-    setShowJoinModal(false)
-    setJoinCode("")
-  }
+    console.log("Joining room with code:", joinCode);
+    setShowJoinModal(false);
+    setJoinCode("");
+  };
 
   const handleCreateRoom = () => {
-    // Implement room creation logic here
-    console.log("Creating new room:", newRoom)
-    setShowCreateModal(false)
-    setNewRoom({ name: "", description: "", isPrivate: false, key: "" })
-  }
+    console.log("Creating new room:", newRoom);
+    setShowCreateModal(false);
+    setNewRoom({ name: "", description: "", isPrivate: false, key: "" });
+  };
 
   return (
     <div>
       {/* Header */}
-      <Header/>
+      <Header />
 
-      <main className="container mx-auto px-4 py-8">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Salas</h1>
-          <div className="space-x-2">
-            <Dialog open={showJoinModal} onOpenChange={setShowJoinModal}>
-              <DialogTrigger asChild>
-                <Button variant="outline">Unirme por código</Button>
+      {/* Navbar */}
+      <div className="text-white py-4">
+        <div className="container mx-auto flex justify-between items-center">
+          <h1 className="text-2xl font-bold">Salas Disponibles</h1>
+          <div className="flex justify-center items-center space-x-2">
+            <Dialog open={showJoinModal} onOpenChange={setShowJoinModal} >
+              <DialogTrigger  asChild>
+                <Button variant="green_button" className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700">
+                  Unirme por código
+                </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
@@ -106,8 +105,8 @@ export default function Component() {
             </Dialog>
 
             <Dialog open={showCreateModal} onOpenChange={setShowCreateModal}>
-              <DialogTrigger asChild>
-                <Button>
+              <DialogTrigger asChild className="bg-green-500">
+                <Button variant="green_button" className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700">
                   <Plus className="mr-2 h-4 w-4" /> Crear sala
                 </Button>
               </DialogTrigger>
@@ -149,7 +148,7 @@ export default function Component() {
                             placeholder="Escribe la descripción en Markdown..."
                           />
                         </TabsContent>
-                        <TabsContent value="preview" className="bg-gray-700 p-4 rounded-md min-h-[200px]">
+                        <TabsContent value="preview" className="bg-gray-700 p-4 rounded-md min-h-[200px] text-white">
                           <ReactMarkdown>{newRoom.description}</ReactMarkdown>
                         </TabsContent>
                       </Tabs>
@@ -185,40 +184,38 @@ export default function Component() {
             </Dialog>
           </div>
         </div>
+      </div>
 
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Nombre de la Sala</TableHead>
-              <TableHead>Creador</TableHead>
-              <TableHead>Usuarios</TableHead>
-              <TableHead>Visibilidad</TableHead>
-              <TableHead className="text-right">Acción</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {rooms.map((room, index) => (
-              <TableRow key={index}>
-                <TableCell className="font-medium">{room.name}</TableCell>
-                <TableCell>{room.creator}</TableCell>
-                <TableCell>{room.users}</TableCell>
-                <TableCell>
-                  {room.visibility === "Privada" ? (
-                    <Lock className="h-4 w-4 text-yellow-500" />
-                  ) : (
-                    <Globe className="h-4 w-4 text-green-500" />
-                  )}
-                </TableCell>
-                <TableCell className="text-right">
-                  <Button variant="ghost" size="sm">
-                    <Check className="h-4 w-4" />
-                  </Button>
-                </TableCell>
+      {/* Tabla de salas */}
+      <div className="container mx-auto px-4 py-6">
+        <div className="overflow-x-auto w-full text-white">
+          <Table className="w-full">
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-1/3">Nombre de la Sala</TableHead>
+                <TableHead className="hidden md:table-cell">Creador</TableHead>
+                <TableHead className="hidden md:table-cell">Usuarios</TableHead>
+                <TableHead className="hidden md:table-cell">Visibilidad</TableHead>
+                <TableHead className="text-right">Acción</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </main>
+            </TableHeader>
+            <TableBody>
+              {rooms.map((room, index) => (
+                <TableRow key={index}>
+                  <TableCell className="font-medium">{room.name}</TableCell>
+                  <TableCell className="hidden md:table-cell">{room.creator}</TableCell>
+                  <TableCell className="hidden md:table-cell">{room.users}</TableCell>
+                  <TableCell className="hidden md:table-cell">{room.visibility}</TableCell>
+                  <TableCell className="text-right">
+                    <Button variant="green_button" size="sm">Unirse</Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      </div>
     </div>
-  )
+  );
 }
+
