@@ -1,9 +1,14 @@
-import React from 'react';
-import Header from '../components/components_layouts/header'
-import { useNavigate } from 'react-router-dom';
-const NiCode = () => {
+import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Sword, Lightbulb, Trophy } from 'lucide-react'
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import Header from "./components_layouts/header"
 
-  const navigate = useNavigate();
+export default function Modes() {
+  const navigate = useNavigate()
+  const [loading, setLoading] = useState(false)
+  const [socket, setSocket] = useState(null)
 
   const navigateProblems = () => {
     navigate('/Problems');
@@ -49,9 +54,39 @@ const NiCode = () => {
                 </p>
             </div>
         </div>
+        <div className="grid md:grid-cols-3 gap-8">
+          {modes.map((mode, index) => (
+            <Card key={index} className="bg-gray-800 border-gray-700 overflow-hidden group">
+              <CardHeader className={`${mode.color} p-6 transition-all duration-300 group-hover:p-10`}>
+                <div className="flex justify-center">{mode.icon}</div>
+              </CardHeader>
+              <CardContent className="p-6">
+                <CardTitle className="text-2xl font-semibold mb-2 text-center mt-10 text-white">
+                  {mode.title}
+                </CardTitle>
+                <CardDescription className="text-gray-400 text-center mb-4">
+                  {mode.description}
+                </CardDescription>
+                {mode.title === "1 vs 1" ? (
+                  <Button 
+                    className="w-full bg-gray-700 hover:bg-gray-600 transition-colors duration-300"
+                    onClick={handleQuickMatch}
+                  >
+                    {loading ? 'Cancelando...' : 'Comenzar'}
+                  </Button>
+                ) : (
+                  <Button 
+                    className="w-full bg-gray-700 hover:bg-gray-600 transition-colors duration-300"
+                    onClick={() => navigate(`/${mode.title.toLowerCase().replace(/\s+/g, '-')}`)}
+                  >
+                    Comenzar
+                  </Button>
+                )}
+              </CardContent>
+            </Card>
+          ))}
         </div>
-    </>
-  );
-};
-
-export default NiCode;
+      </div>
+      </>
+  )
+}

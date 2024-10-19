@@ -3,6 +3,7 @@ import NiCode from '../assets/NiCode.png';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import ReactMarkdown from 'react-markdown';
 
 const ProblemCreateForm = () => {
@@ -17,6 +18,8 @@ const ProblemCreateForm = () => {
     const [paramType, setParamType] = useState('');
     const [paramIsArray, setParamIsArray] = useState(false);
     const [paramPosition, setParamPosition] = useState('');
+    const [returnType, setReturnType] = useState('');
+    const [difficulty, setDifficulty] = useState('');
 
     const [categories, setCategories] = useState([]);
     useEffect(() => {
@@ -56,7 +59,9 @@ const ProblemCreateForm = () => {
             function_name: functionName,
             description: description,
             category: categoryId,
-            parameters: parameters
+            parameters: parameters,
+            return_type: returnType,
+            difficulty: difficulty
         };
 
         console.log(newProblem)
@@ -160,6 +165,37 @@ const ProblemCreateForm = () => {
                                 required
                             />
                         </div>
+
+                    <div className="grid gap-2">
+                        <Label className="text-white">Tipo de Retorno de la Función</Label>
+                        <Select onValueChange={setReturnType} value={returnType}>
+                        <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Selecciona el tipo de retorno" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="int">Int</SelectItem>
+                            <SelectItem value="float">Float</SelectItem>
+                            <SelectItem value="string">String</SelectItem>
+                            <SelectItem value="bool">Bool</SelectItem>
+                            <SelectItem value="char">Char</SelectItem>
+                        </SelectContent>
+                        </Select>
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label className="text-white">Dificultad del Problema</Label>
+                        <Select onValueChange={setDifficulty} value={difficulty}>
+                        <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Selecciona la dificultad" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="1">Fácil</SelectItem>
+                            <SelectItem value="2">Medio</SelectItem>
+                            <SelectItem value="3">Difícil</SelectItem>
+                        </SelectContent>
+                        </Select>
+                    </div>
+
                         <div className="grid gap-2">
                             <Label className="text-white">Nombre de la Función</Label>
                             <Input

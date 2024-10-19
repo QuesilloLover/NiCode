@@ -1,6 +1,7 @@
 from django.db import models
 from users.models import CustomUser
 from codeSystem.models import Problem
+from datetime import datetime
 
 class Room(models.Model):
     """
@@ -19,7 +20,6 @@ class Room(models.Model):
     ]
 
     room_name = models.CharField(max_length=100, unique=True)
-    description = models.TextField(null=True, blank=True)
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     status = models.CharField(
         max_length=100,
@@ -28,30 +28,26 @@ class Room(models.Model):
     )
     private = models.BooleanField(default=False)
     key = models.CharField(max_length=100, null=True, blank=True)
-
+    problem = models.ForeignKey(Problem, on_delete=models.CASCADE, null=True, blank=True, default=None)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.room_name
+    
+    def initialize(self):
+        self.problem = Problem.objects.order_by('?').first()
+        self.created_at = datetime.now()
 
-class RoomMembers(models.Model):
+class RoomHistory(models.Model):
     """
     Room log of users who joined a room
     """
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     joined_at = models.DateTimeField(auto_now_add=True)
+    isWinner = models.BooleanField(default=False)      
+
 
     def __str__(self):
         return f"{self.user.username} in {self.room.room_name}"
-    
-
-class ProblemSet(models.Model):
-    id = models.AutoField(primary_key=True)
-    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='problem_sets', default=1)
-    problem = models.ForeignKey(Problem, on_delete=models.CASCADE, related_name='problem_sets')
-    added_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"ProblemSet for Room {self.room_id} - Problem {self.problem.name}"
