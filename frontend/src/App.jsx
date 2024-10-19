@@ -25,8 +25,8 @@ function App() {
           <Route path="sala" element={<Sala/>}/>
           <Route path="crud" element={<ProblemCreateForm />} />
           <Route path='testcases/:problemId' element={<AddTestCaseForm />} />
-          <Route path='codeEditor' element={<CodeEditor />} />
-          <Route path="coding" element={<Coding/>}   />
+          <Route path='codeEditor/:problemId' element={<CodeEditor />} />
+          <Route path="problem/:problemId" element={<Coding/>}   />
           <Route path="forum" element={<Forum/>}   />
           <Route path='profile' element={<Profile/>}  />
           <Route path='modes' element={<Modes/>} />
@@ -37,13 +37,3 @@ function App() {
 }
 
 export default App;
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <CodeEditor />
-//     </div>
-//   );
-// }
-
-

@@ -169,7 +169,7 @@ export default function Component() {
                       </Label>
                       <Input
                         id="room-key"
-                        type="text"
+                        type="password"
                         value={newRoom.key}
                         onChange={(e) => setNewRoom({ ...newRoom, key: e.target.value })}
                         className="col-span-3"
