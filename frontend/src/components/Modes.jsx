@@ -6,7 +6,7 @@ const NiCode = () => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate('/onebyone');
+    navigate('/Problems');
   };
 
   return (
@@ -21,7 +21,7 @@ const NiCode = () => {
         <p className="text-xl mb-10">Explora tres emocionantes formas de mejorar tus habilidades:</p>
 
         <div className="grid md:grid-cols-3 gap-40 ml-20 mr-20">
-            <div onClick={handleClick} className="bg-gray-800 rounded-lg p-6 transform transition-transform hover:scale-105">
+            <div  className="bg-gray-800 rounded-lg p-6 transform transition-transform hover:scale-105">
                 <div className="text-5xl mb-4">⚔️</div>
                 <h2 className="text-blue-400 text-2xl font-semibold mb-4">1 vs 1</h2>
                 <p className="text-gray-300">
@@ -29,12 +29,12 @@ const NiCode = () => {
                 </p>
             </div>
 
-            <div className="bg-gray-800 rounded-lg p-6 transform transition-transform hover:scale-105">
-            <div className="text-5xl mb-4">💡</div>
-            <h2 className="text-blue-400 text-2xl font-semibold mb-4">Entrenamiento</h2>
-            <p className="text-gray-300">
-                Modo individual para practicar programación a ritmo propio con ejercicios personalizados.
-            </p>
+            <div onClick={handleClick} className="bg-gray-800 rounded-lg p-6 transform transition-transform hover:scale-105">
+                <div className="text-5xl mb-4">💡</div>
+                <h2 className="text-blue-400 text-2xl font-semibold mb-4">Entrenamiento</h2>
+                <p className="text-gray-300">
+                    Modo individual para practicar programación a ritmo propio con ejercicios personalizados.
+                </p>
             </div>
 
             <div className="bg-gray-800 rounded-lg p-6 transform transition-transform hover:scale-105">

@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import JoinByCodeModal from "@/JoinByCodeModal";
 import Header from "./components_layouts/header";
-
+import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
+import { useNavigate } from "react-router-dom";
+
 import {
   Dialog,
   DialogContent,
@@ -26,10 +28,24 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Check, Lock, Globe, Plus } from "lucide-react";
+import { Check, Lock, Globe, Plus, Import } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
 export default function Component() {
+
+  const getDifficultyLabel = (difficulty) => {
+      switch (difficulty) {
+        case 1:
+          return { text: <strong>Fácil</strong>, color: "green" };
+        case 2:
+          return { text: <strong>Medio</strong>, color: "yellow" };
+        case 3:
+          return { text: <strong>Dificil</strong>, color: "red" };
+        default:
+          return { text: <strong>Desconocido</strong>, color: "gray" };
+      }
+    };
+
   const [rooms, setRooms] = useState([]);
   const [showJoinModal, setShowJoinModal] = useState(false);
   const [joinCode, setJoinCode] = useState("");
@@ -41,6 +57,8 @@ export default function Component() {
     isPrivate: false,
     key: "",
   });
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
@@ -99,6 +117,10 @@ export default function Component() {
     });
   };
 
+  const handlePlayClick = (id) => {
+    navigate(`/problem/${id}`);
+  };
+
   return (
     <div>
       {/* Header */}
@@ -106,47 +128,10 @@ export default function Component() {
 
       {/* Navbar */}
       <div className="text-white py-4">
-        <div className="container mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-bold">Salas Disponibles</h1>
+        <div className="container mx-auto flex justify-center items-center mt-5">
+          <h1 className="text-2xl font-bold ">Problemas</h1>
           <div className="flex justify-center items-center space-x-2">
-            <Dialog open={showJoinModal} onOpenChange={setShowJoinModal} >
-              <DialogTrigger  asChild>
-                <Button variant="green_button" className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700">
-                  Unirme por código
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <DialogTitle>Unirse a una sala</DialogTitle>
-                  <DialogDescription>
-                    Introduce el código de la sala a la que quieres unirte.
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="grid gap-4 py-4">
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="code" className="text-right">
-                      Código
-                    </Label>
-                    <Input
-                      id="code"
-                      value={joinCode}
-                      onChange={(e) => setJoinCode(e.target.value)}
-                      className="col-span-3"
-                    />
-                  </div>
-                </div>
-                <DialogFooter>
-                  <Button onClick={handleJoinByCode}>Unirme</Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-
             <Dialog open={showCreateModal} onOpenChange={setShowCreateModal}>
-              <DialogTrigger asChild className="bg-green-500">
-                <Button variant="green_button" className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700">
-                  <Plus className="mr-2 h-4 w-4" /> Crear sala
-                </Button>
-              </DialogTrigger>
               <DialogContent className="sm:max-w-[800px] h-[80vh]">
                 <DialogHeader>
                   <DialogTitle>Crear nueva sala</DialogTitle>
@@ -229,9 +214,10 @@ export default function Component() {
           <Table className="w-full">
             <TableHeader>
               <TableRow>
-                <TableHead className="w-1/3">Nombre de la Sala</TableHead>
-                <TableHead className="hidden md:table-cell">Creador</TableHead>
-                <TableHead className="hidden md:table-cell">Usuarios</TableHead>
+                <TableHead className="w-1/3">Estado</TableHead>
+                <TableHead className="hidden md:table-cell">Titulo</TableHead>
+                <TableHead className="hidden md:table-cell">Descripcion</TableHead>
+                <TableHead className="hidden md:table-cell">Dificultad</TableHead>
                 <TableHead className="hidden md:table-cell">Visibilidad</TableHead>
                 <TableHead className="text-right">Acción</TableHead>
               </TableRow>
@@ -239,12 +225,23 @@ export default function Component() {
             <TableBody>
               {rooms.map((room, index) => (
                 <TableRow key={index}>
+                  <TableCell className="font-medium">{room.is_completed ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#11ff00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-check"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/><path d="m9 9.5 2 2 4-4"/></svg>
+                    ) : (
+                        <p></p>
+                    )}
+                  </TableCell>
                   <TableCell className="font-medium">{room.name}</TableCell>
-                  <TableCell className="hidden md:table-cell">{room.creator}</TableCell>
-                  <TableCell className="hidden md:table-cell">{room.users}</TableCell>
+                  <TableCell className="hidden md:table-cell">{room.description}</TableCell>
+                  <TableCell className="hidden md:table-cell">
+                        {room.difficulty && (() => {
+                        const { text, color } = getDifficultyLabel(room.difficulty);
+                        return <span style={{ color }}>{text}</span>;
+                    })()}
+                  </TableCell>
                   <TableCell className="hidden md:table-cell">{room.visibility}</TableCell>
                   <TableCell className="text-right">
-                    <Button variant="green_button" size="sm">Unirse</Button>
+                  <Button variant="green_button" size="sm" onClick={() => handlePlayClick(room.id)}>Jugar</Button>
                   </TableCell>
                 </TableRow>
               ))}
