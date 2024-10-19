@@ -1,11 +1,11 @@
-from channels.generic.websocket import AsyincWebsocketConsumer
+from channels.generic.websocket import AsyncWebsocketConsumer
 from collections import deque
 import json
 # from .models import Match, MatchHistory
 global user_queue
 user_queue = deque()
 
-class MatchmakingConsumer(AsyincWebsocketConsumer):
+class MatchmakingConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.room_name = 'queue'
         await self.channel_layer.group_add(
@@ -44,17 +44,14 @@ class MatchmakingConsumer(AsyincWebsocketConsumer):
         match = event['match']
         user = self.scope['user']
 
-        matchHistoryInstance = MatchHistory(user=user, match=match, isWinner = False)
-        matchHistoryInstance.save()
+        # matchHistoryInstance = MatchHistory(user=user, match=match, isWinner = False)
+        # matchHistoryInstance.save()
 
         url = f'/match/{match.id}'
         self.send(text_data=json.dumps({'message': 'match_found', 'url': url}))
 
 
-    
-
-
-class RoomConsumer(AsyincWebsocketConsumer):
+class RoomConsumer(AsyncWebsocketConsumer):
     def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['pk']
-        self.room_group_name = 'room_%s' % self.room_name
+        self.room_group_name = 'room_%s' % self.room_nameZ
