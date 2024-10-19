@@ -562,7 +562,7 @@ export default function Forum() {
                   <textarea
                     name="comment"
                     rows="3"
-                    className="w-full border rounded p-2"
+                    className="w-full border rounded p-2 text-gray-950"
                     placeholder="Write a comment..."
                     value={newComment[question.id] || ""}
                     onChange={(e) => setNewComment({ ...newComment, [question.id]: e.target.value })}

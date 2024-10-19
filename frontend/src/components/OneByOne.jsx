@@ -43,7 +43,7 @@ export default function Component() {
   });
 
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem('accessToken');
     if (!token) {
       console.error("No auth token found in localStorage");
       return;

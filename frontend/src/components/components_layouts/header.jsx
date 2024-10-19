@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Search, User } from 'lucide-react';
 import NiCode from '../../assets/NiCode.svg';
+import DefaultImg from '../../assets/Default.png';
 
 import {
   DropdownMenu,
@@ -41,10 +42,10 @@ export default function Header() {
 
   const renderButton = () => {
     switch (location.pathname) {
-      case '/Sala':
+      case '/Modes':
         return <Link to="/" className="text-white hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none">Inicio</Link>;
       default:
-        return <Link to="/Sala" className="text-white hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none">Salas</Link>;
+        return <Link to="/Modes" className="text-white hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none">Comenzar</Link>;
     }
   };
 
@@ -57,35 +58,37 @@ export default function Header() {
     }
   };
 
+  const renderButton3 = () => {
+    switch (location.pathname) {
+      case '/Console':
+        return <Link to="/" className="text-white hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none">Inicio</Link>;
+      default:
+        return <Link to="/Console" className="text-white hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none">Consola</Link>;
+    }
+  };
+
+
+
   return (
     <header>
-      <nav className="bg-gray-900 border-gray-200 px-4 lg:px-6 py-2.5">
+      <nav className="bg-gray-900 border-gray-200 px-4 lg:px-6 py-2.5 pt-0">
         <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
           <Link to="/" className="flex items-center">
             <img src={NiCode} className="mr-3 h-6 sm:h-9" alt="NiCode Logo" />
             <span className="text-white self-center text-xl font-semibold whitespace-nowrap">NiCode</span>
           </Link>
           <div className="flex items-center lg:order-2">
-            <form onSubmit={handleSearchSubmit} className="relative mr-3">
-              <Input
-                type="search"
-                placeholder="Buscar salas"
-                className="w-full pl-10 pr-4 py-2 rounded-lg bg-gray-800 text-white"
-                value={searchQuery}
-                onChange={handleSearchChange}
-              />
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-            </form>
             
             {isLoggedIn ? (
               <>
                 {renderButton()}
                 {renderButton2()}
+                {renderButton3()}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="relative h-8 w-8 rounded-full border">
-                      <User className="h-6 w-6 text-white" />
-                    </Button>
+                  <Button className="p-0 h-20 w-20">
+                    <img src={DefaultImg} alt="Profile" className="h-full w-full rounded-full object-cover" />
+                  </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="bg-gray-800 text-white">
                     <DropdownMenuItem>

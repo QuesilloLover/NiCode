@@ -14,6 +14,8 @@ import Profile from './components/profile/Profile_view';
 import Forum from './components/Forum';
 import Modes from './components/Modes'
 import OneByOne from './components/OneByOne'
+import Problems from './components/Problems'
+import ConsoleFree from './components/ConsoleFree'
 
 
 function App() {
@@ -33,6 +35,8 @@ function App() {
           <Route path='profile' element={<Profile/>}  />
           <Route path='modes' element={<Modes/>} />
           <Route path='onebyone' element={<OneByOne/>} />
+          <Route path='problems' element={<Problems/>} />
+          <Route path='console' element={<ConsoleFree/>} />
         </Route>
       </Routes>
     </BrowserRouter>
