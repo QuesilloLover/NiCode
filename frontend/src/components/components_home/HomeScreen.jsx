@@ -1,10 +1,10 @@
 import React from 'react';
 import NiCode from '../../assets/NiCode.png';
-import text_animated from './text_animated.jsx';
+import Text_animated from './Text_animated.jsx';
 
 const HomeScreen = () => {
   return (
-    <div className="bg-BodyColor mt-20 mb-40 flex flex-col items-center justify-center text-center">
+    <div className="bg-BodyColor mt-20 mb-60 flex flex-col items-center justify-center text-center">
       {/* Logo */}
       {/* <div className="flex flex-col items-center mb-10">
         <img
@@ -19,12 +19,12 @@ const HomeScreen = () => {
       <p className="text-white text-xl">
         Plataforma de Aprendizaje Dinámico y Competitivo 
       </p>
-      <p className="text-white text-xl mb-10">
+      <p className="text-white text-xl mb-20">
         en Programación e Informática
       </p>
 
       {/* Texto adicional */}
-      <text_animated text="Este es un texto animado!" speed={150} />
+      <Text_animated text="Este es un texto animado!" speed={150} />
 
     </div>
   );

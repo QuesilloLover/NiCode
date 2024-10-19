@@ -12,8 +12,6 @@ import ProblemCreateForm from './components/ProblemCreateForm';
 import AddTestCaseForm from './components/TestcasesCreateForm';
 import Profile from './components/profile/Profile_view';
 import Forum from './components/Forum';
-import CourseManager from './components/CourseManager';
-import CourseRenderer from './components/CourseRenderer';
 
 function App() {
   return (
@@ -30,8 +28,6 @@ function App() {
           <Route path="problem/:problemId" element={<Coding/>}   />
           <Route path="forum" element={<Forum/>}   />
           <Route path='profile' element={<Profile/>}  />
-          <Route path='courseManager' element={<CourseManager />} />
-          <Route path='course/:courseId' element={<CourseRenderer />} />
         </Route>
       </Routes>
     </BrowserRouter>

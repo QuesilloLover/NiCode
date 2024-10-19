@@ -2,7 +2,6 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import axios from "axios"
 import { Link, Outlet } from 'react-router-dom';
-import NiCode from '../assets/NiCode.svg';
 import HomeScreen from './components_home/HomeScreen';
 import WhatIsNicode from './components_home/WhatIsNicode';
 import AuthHome from './components_home/AuthHome';
@@ -66,15 +65,21 @@ export default function Home() {
   return (
     <div>
 
-    (
+      {isLoggedIn ? (
+        <>
+      <h2>Hola, {username}! UwU</h2>
+      <button onClick={handleLogout}>Salir</button>
+      </>
+      ):(
         <> 
           <Header/>
           <HomeScreen />
           <WhatIsNicode />
           <AuthHome/>
         </>
-      )
         
+        
+    )}
     </div>
   )
 }

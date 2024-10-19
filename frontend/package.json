@@ -29,7 +29,7 @@
     "@uiw/codemirror-theme-github": "^4.23.3",
     "@uiw/codemirror-theme-xcode": "^4.23.3",
     "@uiw/react-codemirror": "^4.23.3",
-    "add": "^2.0.6",
+
     "axios": "^1.7.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -38,6 +38,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-markdown": "^9.0.1",
+    "react-particles": "^2.12.2",
     "react-router-dom": "^6.26.2",
     "react-tsparticles": "^2.12.2",
     "select": "^1.1.2",

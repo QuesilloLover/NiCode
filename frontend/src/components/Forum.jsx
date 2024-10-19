@@ -24,7 +24,7 @@ export default function Forum() {
   const [totalLikesByComment, setTotalLikesByComment] = useState({});  
   const [comments, setComments] = useState({});
   const [totalCommentsByTopic, setTotalCommentsByTopic] = useState({});
-  const [showTags, setShowTags] = useState(false);
+  const [showTags, setShowTags, showTagsAdd] = useState(false);
   const [tags, setTags] = useState([]);
   const [selectedTag, setSelectedTag] = useState(null); 
   const [showUnanswered, setShowUnanswered] = useState(false); 
@@ -59,7 +59,10 @@ export default function Forum() {
     { 
       icon: PlusCircle, 
       label: "Añadir pregunta", 
-      onClick: () => setIsModalOpen(true) 
+      onClick: () => {
+        setIsModalOpen(true);
+        fetchTags();
+      }
     },
   ];
 
@@ -433,9 +436,7 @@ export default function Forum() {
       <Header/>
 
       {/* Forum */}
-      <div className="flex h-screen bg-gray-100">
-
-        
+      <div className="flex text-gray-400"> {/* aqui son los colores para no perderme jaja */}
         {/* Sidebar */}
         <div className={`bg-gray-lg shadow-lg transition-all duration-300 ${isSidebarExpanded ? "w-64" : "w-16"}`}>
           <div className="flex items-center justify-between p-4">
@@ -456,7 +457,7 @@ export default function Forum() {
 
         {/* Main Content */}
         <main className="flex-1 p-6">
-          <h1 className="mb-6 text-3xl font-bold">Foro</h1>
+          <h1 className="mb-6 text-3xl font-bold text-white">Foro</h1>
           <div className="mb-6 flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
           {showTags ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -473,24 +474,27 @@ export default function Forum() {
             </div>
           ) : (
             <div className="relative flex-grow">
-              <Search className="absolute left-2 top-2.5 h-6 w-5 text-gray-500" />
-              <input
-                type="text"
-                placeholder="Search questions..."
-                className="pl-8 py-2 border rounded w-full"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
+              <div className="flex gap-4 mb-5">
+                <Search className="absolute left-2 top-2.5 h-6 w-5 text-gray-500" />
+                <input
+                  type="text"
+                  placeholder="Buscar preguntas..."
+                  className="w-full pl-10 pr-4 py-2 rounded-lg bg-gray-800 text-white"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
 
-              <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="border rounded px-4 py-2"
-              >
-              <option value="recent">Más recientes</option>
-              <option value="likes">Más votados</option>
-              <option value="answers">Más respondidos</option>
-              </select>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="pl-5 pr-4 py-2 rounded-lg bg-gray-800 text-white"
+                  >
+                  <option value="recent">Más recientes</option>
+                  <option value="likes">Más votados</option>
+                  <option value="answers">Más respondidos</option>
+                </select>
+              </div>
+              
 
               {selectedTag && (
                 <div className="flex justify-between items-center bg-yellow-100 border border-yellow-500 p-2 rounded">
@@ -502,7 +506,7 @@ export default function Forum() {
               {/* Questions List */}
           <div className="overflow-y-auto h-[calc(100vh-220px)] space-y-4">
           {filteredQuestions.map((question) => (
-            <div key={question.id} className="bg-white shadow rounded p-4">
+            <div key={question.id} className="bg-gray-800 text-white shadow rounded p-4">
               <h2 className="text-lg font-semibold">{question.title}</h2>
               <p className="text-gray-600">{question.description}</p>
               
@@ -511,7 +515,7 @@ export default function Forum() {
                   <span
                     key={index}
                     className="px-2 py-1 text-sm font-bold rounded"
-                    style={{ backgroundColor: getRandomColor(), color: "#fff", border: '1px solid #fff' }}
+                    style={{ backgroundColor: getRandomColor(), color: "#000", border: '1px solid #fff' }}
                   >
                     {tag.name}
                   </span>
@@ -619,6 +623,19 @@ export default function Forum() {
                     <Button type="button" onClick={addTag}>
                       Agregar etiqueta
                     </Button>
+                </div>
+                 
+                  <div className="flex flex-wrap gap-4 mt-5">
+                        {tags.map((tag, index) => (
+                        <button 
+                          key={index} 
+                          className="bg-gray-200 text-sm p-2 text-center font-semibold rounded w-full sm:w-auto"
+                          style={{ backgroundColor: getRandomColor(), color: "#fff" }}
+                          onClick={() => handleTagClick(tag.name)}
+                        >
+                          {tag.name}
+                        </button>
+                      ))}
                   </div>
                   <div className="flex space-x-2">
                     {newQuestion.tags.map((tag, index) => (
