@@ -1,6 +1,14 @@
 import React from 'react';
 import Header from '../components/components_layouts/header'
+import { useNavigate } from 'react-router-dom';
 const NiCode = () => {
+
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate('/onebyone');
+  };
+
   return (
     <>
         {/* Header */}
@@ -13,12 +21,12 @@ const NiCode = () => {
         <p className="text-xl mb-10">Explora tres emocionantes formas de mejorar tus habilidades:</p>
 
         <div className="grid md:grid-cols-3 gap-40 ml-20 mr-20">
-            <div className="bg-gray-800 rounded-lg p-6 transform transition-transform hover:scale-105">
-            <div className="text-5xl mb-4">⚔️</div>
-            <h2 className="text-blue-400 text-2xl font-semibold mb-4">1 vs 1</h2>
-            <p className="text-gray-300">
-                Competencias de programación en tiempo real con desafíos y puntuación directa.
-            </p>
+            <div onClick={handleClick} className="bg-gray-800 rounded-lg p-6 transform transition-transform hover:scale-105">
+                <div className="text-5xl mb-4">⚔️</div>
+                <h2 className="text-blue-400 text-2xl font-semibold mb-4">1 vs 1</h2>
+                <p className="text-gray-300">
+                    Competencias de programación en tiempo real con desafíos y puntuación directa.
+                </p>
             </div>
 
             <div className="bg-gray-800 rounded-lg p-6 transform transition-transform hover:scale-105">
