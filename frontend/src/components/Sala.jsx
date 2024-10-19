@@ -187,33 +187,51 @@ export default function Component() {
       </div>
 
       {/* Tabla de salas */}
-      <div className="container mx-auto px-4 py-6">
-        <div className="overflow-x-auto w-full text-white">
-          <Table className="w-full">
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-1/3">Nombre de la Sala</TableHead>
-                <TableHead className="hidden md:table-cell">Creador</TableHead>
-                <TableHead className="hidden md:table-cell">Usuarios</TableHead>
-                <TableHead className="hidden md:table-cell">Visibilidad</TableHead>
-                <TableHead className="text-right">Acción</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {rooms.map((room, index) => (
-                <TableRow key={index}>
-                  <TableCell className="font-medium">{room.name}</TableCell>
-                  <TableCell className="hidden md:table-cell">{room.creator}</TableCell>
-                  <TableCell className="hidden md:table-cell">{room.users}</TableCell>
-                  <TableCell className="hidden md:table-cell">{room.visibility}</TableCell>
-                  <TableCell className="text-right">
-                    <Button variant="green_button" size="sm">Unirse</Button>
-                  </TableCell>
+      <div className="container mx-auto px-4 py-6 bg-[#111828]">
+      <div className="overflow-x-auto w-full">
+        <div className="inline-block min-w-full align-middle">
+          <div className="overflow-hidden border border-white sm:rounded-lg">
+            <Table className="min-w-full divide-y divide-gray-700">
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider text-white ">Nombre de la Sala</TableHead>
+                  <TableHead className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider text-white hidden md:table-cell">Creador</TableHead>
+                  <TableHead className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider text-white hidden md:table-cell">Usuarios</TableHead>
+                  <TableHead className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider text-white hidden md:table-cell">Visibilidad</TableHead>
+                  <TableHead className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-white">Acción</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody className="text-white">
+                {rooms.map((room, index) => (
+                  <TableRow key={index} className="transition-colors hover:bg-gray-800">
+                    <TableCell className="whitespace-nowrap px-6 py-4 text-sm font-medium text-white">
+                      {room.name}
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap px-6 py-4 text-sm text-gray-300 hidden md:table-cell">
+                      {room.creator}
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap px-6 py-4 text-sm text-gray-300 hidden md:table-cell">
+                      {room.users}
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap px-6 py-4 text-sm text-gray-300 hidden md:table-cell">
+                      {room.visibility}
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
+                      <Button 
+                        variant="green_button" 
+                        size="sm"
+                        className="bg-[#22c55e] hover:bg-[#1ea34d] text-white font-bold py-2 px-4 rounded border-2 border-[#22c55e] hover:border-[#1ea34d]"
+                      >
+                        Unirse
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </div>
+      </div>
       </div>
     </div>
   );

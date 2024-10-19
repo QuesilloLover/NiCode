@@ -5,9 +5,13 @@ const NiCode = () => {
 
   const navigate = useNavigate();
 
-  const handleClick = () => {
+  const navigateProblems = () => {
     navigate('/Problems');
   };
+
+  const navigateSalas = () => {
+    navigate('/Sala');
+  }
 
   return (
     <>
@@ -29,7 +33,7 @@ const NiCode = () => {
                 </p>
             </div>
 
-            <div onClick={handleClick} className="bg-gray-800 rounded-lg p-6 transform transition-transform hover:scale-105">
+            <div onClick={navigateProblems} className="bg-gray-800 rounded-lg p-6 transform transition-transform hover:scale-105">
                 <div className="text-5xl mb-4">💡</div>
                 <h2 className="text-blue-400 text-2xl font-semibold mb-4">Entrenamiento</h2>
                 <p className="text-gray-300">
@@ -37,12 +41,12 @@ const NiCode = () => {
                 </p>
             </div>
 
-            <div className="bg-gray-800 rounded-lg p-6 transform transition-transform hover:scale-105">
-            <div className="text-5xl mb-4">🏆</div>
-            <h2 className="text-blue-400 text-2xl font-semibold mb-4">Salas</h2>
-            <p className="text-gray-300">
-                xEspacios virtuales para retos colaborativos o competencias grupales, fomentando interacción y aprendizaje.
-            </p>
+            <div onClick={navigateSalas} className="bg-gray-800 rounded-lg p-6 transform transition-transform hover:scale-105">
+                <div className="text-5xl mb-4">🏆</div>
+                <h2 className="text-blue-400 text-2xl font-semibold mb-4">Salas</h2>
+                <p className="text-gray-300">
+                    Espacios virtuales para retos colaborativos o competencias grupales, fomentando interacción y aprendizaje.
+                </p>
             </div>
         </div>
         </div>

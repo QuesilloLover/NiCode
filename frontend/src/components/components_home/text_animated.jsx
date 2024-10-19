@@ -1,52 +1,41 @@
-import React, { useState, useEffect } from 'react';
+"use client"
 
-const TypingAnimation = () => {
-  const words = ['Python', 'Algoritmos', 'Logica', 'Programacion'];
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
-  const [displayedText, setDisplayedText] = useState('');
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [charIndex, setCharIndex] = useState(0);
-  const [typingSpeed, setTypingSpeed] = useState(200);
+import React, { useState, useEffect } from 'react'
+
+const words = ['Programación', 'Algoritmos', 'Lógica', 'Procesos',]
+
+export default function TextAnimation() {
+  const [currentWord, setCurrentWord] = useState('')
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   useEffect(() => {
-    let typingTimeout;
+    const animateText = () => {
+      const word = words[currentIndex]
 
-    if (isDeleting) {
-      // Borrar letra por letra
-      if (charIndex > 0) {
-        setDisplayedText((prev) => prev.substring(0, prev.length - 1));
-        setCharIndex((prev) => prev - 1);
-        typingTimeout = setTimeout(() => setTypingSpeed(typingSpeed), typingSpeed);
-      } else {
-        // Cambiar al siguiente texto después de eliminar
-        setIsDeleting(false);
-        setCurrentWordIndex((prev) => (prev + 1) % words.length);
-        typingTimeout = setTimeout(() => setTypingSpeed(1000), typingSpeed);
-      }
-    } else {
-      // Escribir letra por letra
-      if (charIndex < words[currentWordIndex].length) {
-        setDisplayedText((prev) => prev + words[currentWordIndex].charAt(charIndex));
-        setCharIndex((prev) => prev + 1);
-        typingTimeout = setTimeout(() => setTypingSpeed(typingSpeed), typingSpeed);
-      } else {
-        // Pausa antes de empezar a borrar
-        typingTimeout = setTimeout(() => setIsDeleting(true), 1000);
+      if (!isDeleting && currentWord.length < word.length) {
+        setCurrentWord(word.slice(0, currentWord.length + 1))
+      } else if (isDeleting && currentWord.length > 0) {
+        setCurrentWord(word.slice(0, currentWord.length - 1))
+      } else if (currentWord.length === word.length) {
+        setIsDeleting(true)
+      } else if (isDeleting && currentWord.length === 0) {
+        setIsDeleting(false)
+        setCurrentIndex((prev) => (prev + 1) % words.length)
       }
     }
 
-    return () => clearTimeout(typingTimeout);
-  }, [charIndex, isDeleting, currentWordIndex, typingSpeed, words]);
+    const timer = setTimeout(animateText, isDeleting ? 70 : 200)
+    return () => clearTimeout(timer)
+  }, [currentWord, currentIndex, isDeleting])
 
   return (
-    <div style={{ fontFamily: 'monospace', fontSize: '30px' }}> {/* Aumenta el tamaño de la fuente */}
-      <span style={{ color: 'white' }}>Aprende </span>
-      <span style={{ color: '#22c55e' }}>{displayedText}</span> {/* Cambia el color a #22c55e */}
-      <span className="cursor" style={{ borderLeft: '2px solid black', marginLeft: '2px' }}></span>
+    <div className="flex items-center justify-center bg-gray-900">
+      <h1 className="text-4xl font-bold">
+        <span className="text-white font-mono">Aprende </span>
+        <span className="text-green-400 font-mono">{currentWord}</span>
+        <span className="text-green-400 animate-blink" aria-hidden="true">|</span>
+      </h1>
     </div>
-  );
-};
-
-export default TypingAnimation;
-
-
+  )
+}

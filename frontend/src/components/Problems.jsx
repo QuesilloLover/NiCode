@@ -209,46 +209,74 @@ export default function Component() {
       </div>
 
       {/* Tabla de salas */}
-      <div className="container mx-auto px-4 py-6">
-        <div className="overflow-x-auto w-full text-white">
-          <Table className="w-full">
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-1/3">Estado</TableHead>
-                <TableHead className="hidden md:table-cell">Titulo</TableHead>
-                <TableHead className="hidden md:table-cell">Descripcion</TableHead>
-                <TableHead className="hidden md:table-cell">Dificultad</TableHead>
-                <TableHead className="hidden md:table-cell">Visibilidad</TableHead>
-                <TableHead className="text-right">Acción</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {rooms.map((room, index) => (
-                <TableRow key={index}>
-                  <TableCell className="font-medium">{room.is_completed ? (
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#11ff00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-check"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/><path d="m9 9.5 2 2 4-4"/></svg>
-                    ) : (
-                        <p></p>
-                    )}
-                  </TableCell>
-                  <TableCell className="font-medium">{room.name}</TableCell>
-                  <TableCell className="hidden md:table-cell">{room.description}</TableCell>
-                  <TableCell className="hidden md:table-cell">
-                        {room.difficulty && (() => {
-                        const { text, color } = getDifficultyLabel(room.difficulty);
-                        return <span style={{ color }}>{text}</span>;
-                    })()}
-                  </TableCell>
-                  <TableCell className="hidden md:table-cell">{room.visibility}</TableCell>
-                  <TableCell className="text-right">
-                  <Button variant="green_button" size="sm" onClick={() => handlePlayClick(room.id)}>Jugar</Button>
-                  </TableCell>
+
+      <div className="container mx-auto px-4 py-6 bg-[#111828]">
+      <div className="overflow-x-auto w-full">
+        <div className="inline-block min-w-full align-middle">
+          <div className="overflow-hidden border border-white sm:rounded-lg">
+            <Table className="min-w-full divide-y divide-gray-700">
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider text-white ">Estado</TableHead>
+                  <TableHead className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider text-white hidden md:table-cell">Titulo</TableHead>
+                  <TableHead className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider text-white hidden md:table-cell">Descripcion</TableHead>
+                  <TableHead className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider text-white hidden md:table-cell">Dificultad</TableHead>
+                  <TableHead className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider text-white hidden md:table-cell">Visibilidad</TableHead>
+                  <TableHead className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-white">Acción</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody className="text-white">
+                {rooms.map((room, index) => (
+                  <TableRow key={index}>
+                    <TableCell className="font-medium">{room.is_completed ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#11ff00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-check"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/><path d="m9 9.5 2 2 4-4"/></svg>
+                      ) : (
+                          <p></p>
+                      )}
+                    </TableCell>
+                    <TableCell className="font-medium">{room.name}</TableCell>
+                    <TableCell className="hidden md:table-cell">{room.description}</TableCell>
+                    <TableCell className="hidden md:table-cell">
+                          {room.difficulty && (() => {
+                          const { text, color } = getDifficultyLabel(room.difficulty);
+                          return <span style={{ color }}>{text}</span>;
+                      })()}
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell">{room.visibility}</TableCell>
+                    <TableCell className="text-right">
+                    <Button variant="green_button" size="sm" onClick={() => handlePlayClick(room.id)}>Jugar</Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </div>
       </div>
+      </div>         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
     </div>
   );
 }

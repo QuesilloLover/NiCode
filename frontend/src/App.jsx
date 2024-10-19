@@ -15,6 +15,7 @@ import Forum from './components/Forum';
 import Modes from './components/Modes'
 import OneByOne from './components/OneByOne'
 import Problems from './components/Problems'
+import ConsoleFree from './components/ConsoleFree'
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           <Route path='modes' element={<Modes/>} />
           <Route path='onebyone' element={<OneByOne/>} />
           <Route path='problems' element={<Problems/>} />
+          <Route path='console' element={<ConsoleFree/>} />
         </Route>
       </Routes>
     </BrowserRouter>
