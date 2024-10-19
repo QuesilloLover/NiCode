@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Room, RoomMembers, ProblemSet
+from .models import Room, RoomHistory
 
 class RoomSerializer(serializers.ModelSerializer):
     class Meta:
@@ -14,13 +14,7 @@ class RoomSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("A room with this name already exists.")
         return value
 
-class RoomMemberSerializer(serializers.ModelSerializer):
+class RoomHistorySerializer(serializers.ModelSerializer):
     class Meta:
-        model = RoomMembers
-        fields = ['id', 'room', 'user', 'joined_at']
-
-class ProblemSetSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProblemSet
-        fields = ['id', 'room', 'problem', 'added_at']
-
+        model = RoomHistory
+        fields = ['id', 'room', 'user', 'joined_at', 'isWinner']
