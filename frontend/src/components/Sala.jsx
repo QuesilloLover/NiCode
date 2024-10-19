@@ -1,15 +1,13 @@
-import React, { useState } from "react";
-import NiCode from "../assets/NiCode.png";
+import React, { useState, useEffect } from "react";
 import JoinByCodeModal from "@/JoinByCodeModal";
-import Header from './components_layouts/header'
+import Header from "./components_layouts/header";
+import axios from "axios";
 
-import { Link } from "react-router-dom"
-import ReactMarkdown from 'react-markdown'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
-import { Textarea } from "@/components/ui/textarea"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
   DialogContent,
@@ -32,26 +30,29 @@ import { Check, Lock, Globe, Plus } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
 export default function Component() {
-  const [rooms, setRooms] = useState([
-    { name: "Sala 1", creator: "User 01", users: "4/10", visibility: "Privada" },
-    { name: "Sala 2", creator: "User 05", users: "10/10", visibility: "Pública" },
-    { name: "Sala 3", creator: "User 10", users: "9/10", visibility: "Pública" },
-    { name: "Sala 4", creator: "User 07", users: "3/10", visibility: "Privada" },
-    { name: "Sala 5", creator: "User 04", users: "2/10", visibility: "Pública" },
-    { name: "Sala 6", creator: "User 02", users: "4/10", visibility: "Privada" },
-    { name: "Sala 7", creator: "User 06", users: "5/10", visibility: "Privada" },
-  ]);
+  // const [rooms, setRooms] = useState([
+  //   { name: "Sala 1", creator: "User 01", users: "4/10", visibility: "Privada" },
+  //   { name: "Sala 2", creator: "User 05", users: "10/10", visibility: "Pública" },
+  //   { name: "Sala 3", creator: "User 10", users: "9/10", visibility: "Pública" },
+  //   { name: "Sala 4", creator: "User 07", users: "3/10", visibility: "Privada" },
+  //   { name: "Sala 5", creator: "User 04", users: "2/10", visibility: "Pública" },
+  //   { name: "Sala 6", creator: "User 02", users: "4/10", visibility: "Privada" },
+  //   { name: "Sala 7", creator: "User 06", users: "5/10", visibility: "Privada" },
+  // ]);
 
+
+  const [rooms, setRooms] = useState([]);
   const [showJoinModal, setShowJoinModal] = useState(false);
   const [joinCode, setJoinCode] = useState("");
 
+  const accessToken = localStorage.getItem("accessToken");
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newRoom, setNewRoom] = useState({
-    name: "",
+    room_name: "",
     description: "",
-    isPrivate: false,
+    private: false,
     key: "",
-  });
+  }, []);
 
   const handleJoinByCode = () => {
     console.log("Joining room with code:", joinCode);
@@ -65,10 +66,30 @@ export default function Component() {
     setNewRoom({ name: "", description: "", isPrivate: false, key: "" });
   };
 
+  useEffect(() => {
+    const fetchRooms = async () => {
+      try {
+          // Get all the available topics
+          const response = await axios.get('http://localhost:8000/rooms/', {
+              headers: {
+                  Authorization: `Bearer ${accessToken}`,
+              },
+          });
+          setRooms(response.data);
+          console.log("Rooms fetched successfully", response.data);
+      } catch (error) {
+          console.error("Error fetching rooms", error);
+      }
+    }
+
+    fetchRooms();
+  }, []);  
+
+
   return (
     <div>
       {/* Header */}
-      <Header/>
+      <Header />
 
       {/* Navbar */}
       <div className="text-white py-4">
@@ -205,10 +226,10 @@ export default function Component() {
             <TableBody>
               {rooms.map((room, index) => (
                 <TableRow key={index}>
-                  <TableCell className="font-medium">{room.name}</TableCell>
-                  <TableCell className="hidden md:table-cell">{room.creator}</TableCell>
-                  <TableCell className="hidden md:table-cell">{room.users}</TableCell>
-                  <TableCell className="hidden md:table-cell">{room.visibility}</TableCell>
+                  <TableCell className="font-medium">{room.room_name}</TableCell>
+                  <TableCell className="hidden md:table-cell">{room.owner_username}</TableCell>
+                  <TableCell className="hidden md:table-cell">{room.members_count + '/10'}</TableCell>
+                  <TableCell className="hidden md:table-cell">{room.private ? "Privada" : "Pública"}</TableCell>
                   <TableCell className="text-right">
                     <Button variant="green_button" size="sm">Unirse</Button>
                   </TableCell>
